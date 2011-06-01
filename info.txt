@@ -1,0 +1,11 @@
+"Gamemode"
+{
+	"name"			"Settlers of Catan"
+	"version		"1.0"
+	"up_date"		"2 June 2011"
+	"author_name"	"Overv, Sassafrass, Spacetech"
+
+	"info"			"Garry's Mod version of Settlers of Catan for the GCC."
+	"icon"			""
+	"hide"			"0"
+}
