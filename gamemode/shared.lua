@@ -3,7 +3,7 @@
 AddCSLuaFile("includes.lua")
 
 GM.Name 	= "Settlers of GMod"
-GM.Author 	= "Sassafrass, Overv, and Spacetech"
+GM.Author 	= "Sassafrass, Overv, and Spacetech!"
 GM.Email 	= ""
 GM.Website 	= ""
 
