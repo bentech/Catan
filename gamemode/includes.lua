@@ -1,5 +1,3 @@
-
-
 function AddCSLuaFolder( foldername, bRecursive )
 	
 	--TODO: AddCSLuaFile() all lua files in this folder

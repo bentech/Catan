@@ -8,7 +8,6 @@
 	"info"			"Garry's Mod version of Settlers of Catan for the GCC."
 	"icon"			""
 	"hide"			"0"
-	
 	"mappattern"
 	{
 		"1"	"^sog_"
