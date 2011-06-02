@@ -10,7 +10,6 @@ function AddCSLuaFolder( foldername )
 		Msg("Successful\n")
 	end
 	Msg("AddCSLuaDirectory: Successful\n")
-end
 
 function includeFolder( foldername )
 	Msg("Loading "..foldername.." Files...\n")
