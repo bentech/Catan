@@ -1,15 +1,25 @@
 
+local Prefix = string.sub(GM.Folder, 11)
+local PrefixGamemode = Prefix.."/gamemode"
 
-function AddCSLuaFolder( foldername, bRecursive )
-	
-	--TODO: AddCSLuaFile() all lua files in this folder
-	
+function AddCSLuaFolder( foldername )
+	Msg("AddCSLuaDirectory: "..foldername.."...\n")
+	for k,v in pairs(file.FindInLua(PrefixGamemode.."/"..foldername.."/*.lua")) do
+		Msg("\tAddCSLuaFile "..v..":")
+		AddCSLuaFile(foldername.."/"..v)
+		Msg("Successful\n")
+	end
+	Msg("AddCSLuaDirectory: Successful\n")
 end
 
-function includefolder( foldername, bRecursive )
-	
-	--TODO: include all lua files in this folder
-	
+function includeFolder( foldername )
+	Msg("Loading "..foldername.." Files...\n")
+	for k,v in pairs(file.FindInLua(PrefixGamemode.."/"..foldername.."/*.lua")) do
+		Msg("\tLoading "..v..":")
+		include(foldername.."/"..v)
+		Msg("Loaded Successfully\n")
+	end
+	Msg("Loaded Successfully\n")
 end
 
 print( "#################################" )
@@ -30,6 +40,8 @@ print( "#################################" )
 
 print( "#################################" )
 print( "# Loading serverside files      #" )
+
+include("resources.lua")
 
 include("skybox.lua")
 
