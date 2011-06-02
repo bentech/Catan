@@ -15,6 +15,8 @@ end
 print( "#################################" )
 print( "# Loading shared files          #" )
 
+include("enums.lua")
+
 print( "# Done loading shared files     #" )
 print( "#################################" )
 
@@ -28,6 +30,8 @@ print( "#################################" )
 
 print( "#################################" )
 print( "# Loading serverside files      #" )
+
+include("skybox.lua")
 
 print( "# Done loading shared files     #" )
 print( "#################################" )

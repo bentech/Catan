@@ -10,6 +10,6 @@ function ENUM( enumName, ... )
 		e[ arg[i] ] = i
 	end
 	
-	_G[ "enumName" ] = e
+	_G[ enumName ] = e
 	
 end
