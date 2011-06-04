@@ -10,6 +10,7 @@ function AddCSLuaFolder( foldername )
 		Msg("Successful\n")
 	end
 	Msg("AddCSLuaDirectory: Successful\n")
+end
 
 function includeFolder( foldername )
 	Msg("Loading "..foldername.." Files...\n")
@@ -25,6 +26,7 @@ print( "#################################" )
 print( "# Loading shared files          #" )
 
 include("enums.lua")
+-- include("Systems/PlayerManager/shared/hooks.lua")
 
 print( "# Done loading shared files     #" )
 print( "#################################" )
@@ -41,8 +43,11 @@ print( "#################################" )
 print( "# Loading serverside files      #" )
 
 include("resources.lua")
-
 include("skybox.lua")
+include("hooks.lua")
+
+include("Systems/PlayerManager/server/hooks.lua")
+includeFolder( "Systems/PlayerManager/commands" )
 
 print( "# Done loading shared files     #" )
 print( "#################################" )
@@ -51,6 +56,8 @@ elseif( CLIENT ) then
 
 print( "#################################" )
 print( "# Loading clientside files      #" )
+
+include("Systems/PlayerManager/client/hooks.lua")
 
 print( "# Done loading shared files     #" )
 print( "#################################" )

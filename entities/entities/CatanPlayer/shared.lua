@@ -72,14 +72,16 @@ local function PlayerAccessorFuncNW( tab, varname, name, varDefault, vartype, bP
 end
 
 local PRIVATE = true
-local PUBLIC = false
 
-PlayerAccessorFuncNW( methods, "res_Wool", "Wool", 0, VARTYPE_SHORT, PRIVATE )
-PlayerAccessorFuncNW( methods, "res_Brick", "Brick", 0, VARTYPE_SHORT, PRIVATE )
-PlayerAccessorFuncNW( methods, "res_Ore", "Ore", 0, VARTYPE_SHORT, PRIVATE )
-PlayerAccessorFuncNW( methods, "res_Grain", "Grain", 0, VARTYPE_SHORT, PRIVATE )
-PlayerAccessorFuncNW( methods, "res_Lumber", "Lumber", 0, VARTYPE_SHORT, PRIVATE )
+PlayerAccessorFuncNW( ENT, "res_Wool", "Wool", 0, VARTYPE_SHORT, PRIVATE )
+PlayerAccessorFuncNW( ENT, "res_Brick", "Brick", 0, VARTYPE_SHORT, PRIVATE )
+PlayerAccessorFuncNW( ENT, "res_Ore", "Ore", 0, VARTYPE_SHORT, PRIVATE )
+PlayerAccessorFuncNW( ENT, "res_Grain", "Grain", 0, VARTYPE_SHORT, PRIVATE )
+PlayerAccessorFuncNW( ENT, "res_Lumber", "Lumber", 0, VARTYPE_SHORT, PRIVATE )
 
+PRIVATE = nil
+
+AccessorFuncNW( ENT, "victory_points", "VictoryPoints", FORCE_NUMBER )
 
 function ENT:SetupDataTables()
 	
