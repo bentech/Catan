@@ -49,15 +49,36 @@ function Lobby:JoinGame( CPlayer, GameID, GamePass )
 		
 		CGame:AddPlayer( CPlayer )
 		
+		CPlayer:GetPlayer():ChatPrint( "You've successfully join the game." )
+		
+	end
+	
+end
+
+function Lobby:List( CPlayer )
+	
+	for ID, CGame in pairs( Lobby.Games ) do
+		
+		local str = "[" .. ID .. "]" .. CGame:GetName()
+		if( CGame:GetPassword() ) then
+			
+			str = str .. "(Passworded)"
+			
+		end
+		
+		CPlayer:GetPlayer():ChatPrint( str )
+		
 	end
 	
 end
 
 function Lobby.GetGameByID( id )
 	
-	for _, CGame in pairs( GAMEMODE.Lobby.Games ) do
+	id = tonumber( id )
+	
+	for ID, CGame in pairs( Lobby.Games ) do
 		
-		if( CGame:GameID() == id ) then
+		if( ID == id ) then
 			
 			return CGame
 			

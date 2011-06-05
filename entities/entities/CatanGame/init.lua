@@ -81,6 +81,10 @@ function ENT:RemovePlayer( CPl )
 end
 
 function ENT:CanPlayerJoin( CPl )
+	
+	if( CPl:IsInGame() ) then return false end
+	return self:GetNumPlayers() < self:GetMaxPlayers()
+	
 end
 
 function ENT:SetMaxPlayers( num )

@@ -8,4 +8,7 @@ function LocalCPlayer()
 end
 
 function ENT:Draw()
+	
+	self:DrawModel()
+	
 end

@@ -6,17 +6,9 @@ function GM.PlayerMeta:SetCPlayer( CPl )
 	
 	self:SetNWEntity( "CPlayer", CPl )
 	self.CanEnterVehicle = true
-	self:SetScriptedVehicle( CPl )
-	
 	self:SetPos( CPl:GetPos() )
 	self:SetParent( CPl )
-	
-	-- self:Spectate( OBS_MODE_CHASE )
-	-- self:SpectateEntity( CPl )
-	
-	-- if ( !SinglePlayer() ) then
-		-- self:SetClientsideVehicle( CPl )
-	-- end
+	self:EnterVehicle( CPl )
 	
 end
 

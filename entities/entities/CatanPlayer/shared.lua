@@ -1,5 +1,5 @@
 
-ENT.Type = "vehicle"
+ENT.Type = "anim"
 ENT.Base = "base_anim"
 
 VARTYPE_STRING = "String"

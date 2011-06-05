@@ -12,7 +12,7 @@ concommand.Add( "join", function( pl, cmd, args )
 		
 	end
 	
-	local gameID = tonumber( args[1] )
+	local game_id = tonumber( args[1] )
 	local game_pass = args[2]
 	
 	GAMEMODE.Lobby:JoinGame( CPl, game_id, game_pass )

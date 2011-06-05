@@ -1,66 +1,66 @@
--- gui.EnableScreenClicker( true )
+gui.EnableScreenClicker( true )
 
--- GM.MouseDragging = false
--- GM.MouseX = 0
--- GM.MouseY = 0
--- GM.RotationDelta = 0
--- GM.MoveDelta = 0
+GM.MouseDragging = false
+GM.MouseX = 0
+GM.MouseY = 0
+GM.RotationDelta = 0
+GM.MoveDelta = 0
 
--- local WP = vgui.GetWorldPanel()
+local WP = vgui.GetWorldPanel()
 
--- function WP:OnCursorMoved( x, y )
+function WP:OnCursorMoved( x, y )
 	
-	-- local dx = x - ScrW() * 0.5
-	-- local dy = y - ScrH() * 0.5
-	-- gamemode.Call( "GUIMouseMoved", dx, dy )
+	local dx = x - ScrW() * 0.5
+	local dy = y - ScrH() * 0.5
+	gamemode.Call( "GUIMouseMoved", dx, dy )
 	
--- end
+end
 
--- function GM:GUIMousePressed( mc )
+function GM:GUIMousePressed( mc )
 	
-	-- if( mc == MOUSE_RIGHT ) then
+	if( mc == MOUSE_RIGHT ) then
 		
-		-- if( not self.MouseDragging ) then
+		if( not self.MouseDragging ) then
 			
-			-- self.MouseDragging = true
-			-- self.MouseX = gui.MouseX()
-			-- self.MouseY = gui.MouseY()
-			-- gui.SetMousePos( ScrW() * 0.5, ScrH() * 0.5 )
-			-- WP:SetCursor( "blank" )
+			self.MouseDragging = true
+			self.MouseX = gui.MouseX()
+			self.MouseY = gui.MouseY()
+			gui.SetMousePos( ScrW() * 0.5, ScrH() * 0.5 )
+			WP:SetCursor( "blank" )
 			
-		-- end
+		end
 		
-	-- end
+	end
 	
--- end
+end
 
--- function GM:GUIMouseMoved( dx, dy )
+function GM:GUIMouseMoved( dx, dy )
 	
-	-- if( not self.MouseDragging ) then return end
+	if( not self.MouseDragging ) then return end
 	
-	-- gui.SetMousePos( ScrW() * 0.5, ScrH() * 0.5 )
+	gui.SetMousePos( ScrW() * 0.5, ScrH() * 0.5 )
 	
-	-- self.RotationDelta = self.RotationDelta + dx * 0.025 * GetConVarNumber( "sensitivity" )
-	-- self.MoveDelta = self.MoveDelta + dy * 0.075 * GetConVarNumber( "sensitivity" )
+	self.RotationDelta = self.RotationDelta + dx * 0.025 * GetConVarNumber( "sensitivity" )
+	self.MoveDelta = self.MoveDelta + dy * 0.075 * GetConVarNumber( "sensitivity" )
 	
--- end
+end
 
--- function GM:GUIMouseReleased( mc )
+function GM:GUIMouseReleased( mc )
 
-	-- if( mc == MOUSE_RIGHT ) then	
+	if( mc == MOUSE_RIGHT ) then	
 		
-		-- if( self.MouseDragging ) then
+		if( self.MouseDragging ) then
 			
-			-- self.MouseDragging = false
-			-- WP:SetCursor( "none" )
+			self.MouseDragging = false
+			WP:SetCursor( "none" )
 			
-			-- gui.SetMousePos( self.MouseX, self.MouseY )
+			gui.SetMousePos( self.MouseX, self.MouseY )
 			
-		-- end
+		end
 		
-	-- end
+	end
 	
--- end
+end
 
 function GM:HUDShouldDraw(Name)
 	

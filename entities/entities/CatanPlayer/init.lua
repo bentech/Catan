@@ -8,6 +8,19 @@ function ENT:Initialize()
 	self:SetModel( "models/props_c17/furniturechair001a.mdl" )
 	self:PhysicsInitBox( Vector() * -1, Vector() )
 	
+	local phys = self:GetPhysicsObject()
+	if( IsValid( phys ) ) then
+		
+		phys:EnableMotion( false )
+		
+	end
+	
+end
+
+function ENT:Think()
+	
+	self:SetAngles( Angle( 0, CurTime() * 4, 0 ) )
+	
 end
 
 function ENT:UpdateTransmitState()
