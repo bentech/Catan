@@ -26,7 +26,7 @@ print( "#################################" )
 print( "# Loading shared files          #" )
 
 include("enums.lua")
--- include("Systems/PlayerManager/shared/hooks.lua")
+include("Systems/PlayerManager/shared/hooks.lua")
 
 print( "# Done loading shared files     #" )
 print( "#################################" )
@@ -58,6 +58,7 @@ print( "#################################" )
 print( "# Loading clientside files      #" )
 
 include("Systems/PlayerManager/client/hooks.lua")
+include("GUI/core.lua")
 
 print( "# Done loading shared files     #" )
 print( "#################################" )

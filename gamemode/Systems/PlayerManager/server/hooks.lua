@@ -12,6 +12,8 @@ function GM:PlayerInitialSpawn( pl )
 	pl:ChatPrint( "/create to create a game lobby" )
 	pl:ChatPrint( "/help to see available ingame commands" )
 	
+	pl:SetModel( "models/Player/Group01/Male_01.mdl" )
+	
 	if( !host_player ) then
 		
 		host_player = pl
@@ -22,11 +24,21 @@ function GM:PlayerInitialSpawn( pl )
 		umsg.Vector( self.skycam:GetPos() )
 	umsg.End()
 	
+	pl:SetHullDuck( Vector( -16, -16, 0 ), Vector( 16, 16, 72 ) )
+	
 end
 
 function GM:PlayerSpawn( pl )
 	
-	pl:SetMoveType( MOVETYPE_NOCLIP )
+	--Temporary
+	local chair = ents.FindByName( "prop_chair" )[1]
+	pl:SetPos( chair:LocalToWorld( Vector( 65, 0, 0 ) ) )
+	local ang = chair:GetAngles()
+	ang:RotateAroundAxis( Vector( 0, 0, 1 ), 180 )
+	pl:SetEyeAngles( ang )
+	----------
+	
+	pl:SetMoveType( MOVETYPE_CUSTOM )
 	
 end
 
