@@ -8,3 +8,6 @@ function ENT:Initialize()
 	self.Players = {}
 	
 end
+
+function ENT:Draw()
+end

@@ -55,7 +55,7 @@ function ENT:AddPlayer( CPl )
 		local p = self.Players[ i ]
 		if( not p ) then
 			
-			CPl:SetID( i )
+			CPl:SetPlayerID( i )
 			CPl:SetGame( self )
 			local chair = GAMEMODE:GetChairByID( i )
 			CPl:SetPos( chair:LocalToWorld( Vector( 0, 0, 0 ) ) )

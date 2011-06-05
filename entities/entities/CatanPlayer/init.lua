@@ -6,7 +6,11 @@ include("shared.lua")
 function ENT:Initialize()
 	
 	self:SetModel( "models/props_c17/furniturechair001a.mdl" )
-	self:PhysicsInitBox( Vector() * -1, Vector() )
+	-- self:PhysicsInitBox( Vector() * -1, Vector() )
+	self:PhysicsInit( SOLID_VPHYSICS )
+	
+	self:SetMoveType(MOVETYPE_CUSTOM)
+	self:SetSolid(SOLID_VPHYSICS)
 	
 	local phys = self:GetPhysicsObject()
 	if( IsValid( phys ) ) then
@@ -15,23 +19,26 @@ function ENT:Initialize()
 		
 	end
 	
+	ErrorNoHalt( self, "\n" )
+	
 end
 
 function ENT:Think()
 	
+	ErrorNoHalt( "Thinking\n" )
 	self:SetAngles( Angle( 0, CurTime() * 4, 0 ) )
 	
 end
 
-function ENT:UpdateTransmitState()
+-- function ENT:UpdateTransmitState()
 	
-	return TRANSMIT_ALWAYS
+	-- return TRANSMIT_ALWAYS
 	
-end
+-- end
 
 function ENT:SetGame( CGame )
 	
-	self:SetDTEntity( 1, CGame )
+	self.dt.Game = CGame
 	
 end
 
@@ -41,7 +48,7 @@ function ENT:UniqueID()
 	
 end
 
-function ENT:SetID( id )
+function ENT:SetPlayerID( id )
 	
 	self.dt.PlayerID = id
 	

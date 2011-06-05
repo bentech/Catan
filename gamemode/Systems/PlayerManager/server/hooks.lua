@@ -5,10 +5,10 @@ GM.PlayerManager.Players = {}
 function GM.PlayerMeta:SetCPlayer( CPl )
 	
 	self:SetNWEntity( "CPlayer", CPl )
-	self.CanEnterVehicle = true
+	-- self.CanEnterVehicle = true
 	self:SetPos( CPl:GetPos() )
-	self:SetParent( CPl )
-	self:EnterVehicle( CPl )
+	-- self:SetParent( CPl )
+	-- self:EnterVehicle( CPl )
 	
 end
 
@@ -36,7 +36,7 @@ function GM:PlayerInitialSpawn( pl )
 	umsg.End()
 	
 	pl:SetHullDuck( Vector( -16, -16, 0 ), Vector( 16, 16, 72 ) )
-	pl:SetAllowFullRotation( true )
+	-- pl:SetAllowFullRotation( true )
 	
 end
 
