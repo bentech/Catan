@@ -5,10 +5,18 @@ GM.PlayerManager.Players = {}
 function GM.PlayerMeta:SetCPlayer( CPl )
 	
 	self:SetNWEntity( "CPlayer", CPl )
+	self.CanEnterVehicle = true
+	self:SetScriptedVehicle( CPl )
+	
 	self:SetPos( CPl:GetPos() )
-	self:SetAngles( CPl:GetAngles() )
-	self:SetEyeAngles( CPl:GetAngles() )
 	self:SetParent( CPl )
+	
+	-- self:Spectate( OBS_MODE_CHASE )
+	-- self:SpectateEntity( CPl )
+	
+	-- if ( !SinglePlayer() ) then
+		-- self:SetClientsideVehicle( CPl )
+	-- end
 	
 end
 
@@ -36,6 +44,26 @@ function GM:PlayerInitialSpawn( pl )
 	umsg.End()
 	
 	pl:SetHullDuck( Vector( -16, -16, 0 ), Vector( 16, 16, 72 ) )
+	pl:SetAllowFullRotation( true )
+	
+end
+
+function GM:CanPlayerEnterVehicle( pl, vehicle )
+	
+	if( pl.CanEnterVehicle ) then
+		
+		pl.CanEnterVehicle = false
+		return true
+		
+	end
+	
+	return false
+	
+end
+
+function GM:CanExitVehicle()
+	
+	return false
 	
 end
 
@@ -92,7 +120,7 @@ end
 
 function GM:PlayerSpawn( pl )
 	
-	pl:SetMoveType( MOVETYPE_CUSTOM )
+	pl:SetMoveType( MOVETYPE_NOCLIP )
 	
 end
 

@@ -11,6 +11,7 @@ function ENT:Initialize()
 end
 
 AccessorFunc( ENT, "CHostPlayer", "Host" )
+AccessorFunc( ENT, "Password", "Password" )
 
 function ENT:UpdateTransmitState()
 	
@@ -52,16 +53,17 @@ function ENT:AddPlayer( CPl )
 	for i = 1, self:GetMaxPlayers() do
 		
 		local p = self.Players[ i ]
-		ErrorNoHalt( i, "\t", p, "\n" )
 		if( not p ) then
 			
 			CPl:SetID( i )
 			CPl:SetGame( self )
 			local chair = GAMEMODE:GetChairByID( i )
-			CPl:SetPos( chair:LocalToWorld( Vector( 65, 0, 0 ) ) )
+			CPl:SetPos( chair:LocalToWorld( Vector( 0, 0, 0 ) ) )
 			local ang = chair:GetAngles()
-			ang:RotateAroundAxis( Vector( 0, 0, 1 ), 180 )
+			-- ang:RotateAroundAxis( Vector( 0, 0, 1 ), 180 )
 			CPl:SetAngles( ang )
+			-- CPl:GetPlayer():SetPos( CPl:GetPos() )
+			-- CPl:GetPlayer():SetAngles( ang )
 			-- CPl:GetPlayer():SetEyeAngles( ang )
 			
 			return true

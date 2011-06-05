@@ -36,6 +36,14 @@ if( SERVER ) then
 print( "#################################" )
 print( "# Adding CSLua files            #" )
 
+AddCSLuaFolder( "Systems/PlayerManager/client" )
+AddCSLuaFolder( "Systems/PlayerManager/shared" )
+AddCSLuaFolder( "Systems/TurnManager/client" )
+AddCSLuaFolder( "Systems/TurnManager/shared" )
+AddCSLuaFolder( "Systems/Lobby/client" )
+AddCSLuaFolder( "Systems/Lobby/shared" )
+AddCSLuaFolder( "GUI" )
+
 print( "# Done adding CSLua files       #" )
 print( "#################################" )
 
