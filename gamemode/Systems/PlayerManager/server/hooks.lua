@@ -1,10 +1,21 @@
 
-function GM:AssociatePlayer( pl )
+GM.PlayerManager = {}
+GM.PlayerManager.Players = {}
+
+function GM.PlayerMeta:SetCPlayer( CPl )
+	
+	self:SetNWEntity( "CPlayer", CPl )
+	self:SetPos( CPl:GetPos() )
+	self:SetAngles( CPl:GetAngles() )
+	self:SetEyeAngles( CPl:GetAngles() )
+	self:SetParent( CPl )
+	
 end
 
 function GM:PlayerInitialSpawn( pl )
 	
-	pl:ChatPrint( "Welcome " .. pl:Name() )
+	gamemode.Call( "AssociatePlayer", pl )
+	
 	pl:ChatPrint( "We don't have a UI yet, so use these commands instead." )
 	pl:ChatPrint( "/list to see a list of games" )
 	pl:ChatPrint( "/join [GameID] to join a game" )
@@ -12,7 +23,7 @@ function GM:PlayerInitialSpawn( pl )
 	pl:ChatPrint( "/create to create a game lobby" )
 	pl:ChatPrint( "/help to see available ingame commands" )
 	
-	pl:SetModel( "models/Player/Group01/Male_01.mdl" )
+	self:SetupPlayerModel( pl )
 	
 	if( !host_player ) then
 		
@@ -28,15 +39,58 @@ function GM:PlayerInitialSpawn( pl )
 	
 end
 
-function GM:PlayerSpawn( pl )
+function GM.PlayerManager.GetPlayers()
 	
-	--Temporary
-	local chair = ents.FindByName( "prop_chair" )[1]
-	pl:SetPos( chair:LocalToWorld( Vector( 65, 0, 0 ) ) )
-	local ang = chair:GetAngles()
-	ang:RotateAroundAxis( Vector( 0, 0, 1 ), 180 )
-	pl:SetEyeAngles( ang )
-	----------
+	return GAMEMODE.PlayerManager.Players
+	
+end
+
+function GM:SetupPlayerModel( pl )
+	
+	pl:SetModel( "models/Player/Group01/Male_01.mdl" )
+	
+end
+
+function GM:AssociatePlayer( pl )
+	
+	local associated = false
+	
+	for _, CPl in pairs( self.PlayerManager.GetPlayers() ) do
+		
+		if( CPl:UniqueID() == pl:UniqueID() ) then
+			
+			associated = true
+			
+			CPl:SetPlayer( pl )
+			pl:SetCPlayer( CPl )
+			pl:ChatPrint( "Welcome back " .. pl:Name() )
+			break
+			
+		end
+		
+	end
+	
+	if( not associated ) then
+		
+		--No player found, create a new one
+		local CPl = ents.Create( "CatanPlayer" )
+		CPl:SetPlayer( pl )
+		pl:SetCPlayer( CPl )
+		pl:ChatPrint( "Welcome " .. pl:Name() )
+		
+	end
+	
+	gamemode.Call( "SendGameData", pl )
+	
+end
+
+function GM:SendGameData( pl )
+	
+	--TODO: send any custom networked variables to the player, stuff that was sent with usermessages.
+	
+end
+
+function GM:PlayerSpawn( pl )
 	
 	pl:SetMoveType( MOVETYPE_CUSTOM )
 	

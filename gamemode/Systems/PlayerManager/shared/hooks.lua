@@ -5,13 +5,33 @@ function GM:CalcMainActivity( ply, velocity )
 	return ply.CalcIdeal, ply.CalcSeqOverride
 end
 
+function GM.PlayerMeta:GetCPlayer()
+	
+	return self:GetNWEntity( "CPlayer" )
+	
+end
+
 function GM.PlayerMeta:IsInGame()
 	
-	return true
+	local CPl = self:GetCPlayer()
+	if( not ValidEntity( CPl ) ) then return false end
+	
+	if( CPl:IsInGame() ) then
+		return true
+	end
+	
+	return false
 	
 end
 
 function GM.PlayerMeta:IsSpectatingGame()
+	
+	local CPl = self:GetCPlayer()
+	if( not ValidEntity( CPl ) ) then return false end
+	
+	if( CPl:IsSpectatingGame() ) then
+		return true
+	end
 	
 	return false
 	

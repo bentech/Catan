@@ -21,6 +21,18 @@ function ENT:Initialize()
 	
 end
 
+function ENT:UpdateTransmitState()
+	
+	return TRANSMIT_ALWAYS
+	
+end
+
+function ENT:SetGame( CGame )
+	
+	self.dt.Game = CGame
+	
+end
+
 function ENT:CreateTiles()
 	
 	local player_count = self:GetGame():GetNumPlayers()

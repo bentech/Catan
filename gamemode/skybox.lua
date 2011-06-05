@@ -4,14 +4,25 @@ function GM:InitSkybox()
 		prop:Remove()
 	end
 	
-	for i, chair in pairs( ents.FindByName( "prop_chair" ) ) do
-		local playerModel = ents.Create( "npc_catanplayer" )
-		playerModel:Spawn()
-		playerModel:Activate()
-		playerModel:SetPos( chair:LocalToWorld( Vector( 65, 0, -20 ) ) )
-		local ang = chair:GetAngles()
-		ang:RotateAroundAxis( Vector( 0, 0, 1 ), 180 )
-		playerModel:SetAngles( ang )
+	self.Chairs = ents.FindByName( "prop_chair" )
+	for i, chair in pairs( self.Chairs ) do
+		chair:SetNWInt( "ID", i )
 	end
+	
+end
+
+function GM:GetChairByID( id )
+	
+	for i, chair in pairs( self.Chairs ) do
+		
+		if( chair:GetNWInt( "ID" ) == id ) then
+			
+			return chair
+			
+		end
+		
+	end
+	
+	Error( "Invalid Chair ID ", id, "\n" )
 	
 end

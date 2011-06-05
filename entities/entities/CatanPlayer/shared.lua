@@ -87,6 +87,7 @@ function ENT:SetupDataTables()
 	
 	self:DTVar( "Int", 0, "PlayerID" )
 	self:DTVar( "Entity", 0, "Player" )
+	self:DTVar( "Entity", 1, "Game" )
 	
 end
 
@@ -99,5 +100,24 @@ end
 function ENT:GetPlayer()
 	
 	return self.dt.Player
+	
+end
+
+function ENT:GetGame()
+	
+	return self:GetDTEntity( 1 )
+	
+end
+
+function ENT:IsInGame()
+	
+	return ValidEntity( self:GetGame() )
+	
+end
+
+function ENT:IsSpectatingGame()
+	
+	--TODO:
+	return false
 	
 end
