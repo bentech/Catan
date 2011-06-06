@@ -9,8 +9,18 @@ function ENT:Initialize()
 	-- self:PhysicsInitBox( Vector() * -1, Vector() )
 	self:PhysicsInit( SOLID_VPHYSICS )
 	
-	self:SetMoveType(MOVETYPE_CUSTOM)
+	-- self:SetMoveType( MOVETYPE_NONE )
 	self:SetSolid(SOLID_VPHYSICS)
+	
+	self.Vehicle = ents.Create( "prop_vehicle_prisoner_pod" )
+	self.Vehicle:SetModel( "models/props_c17/furniturechair001a.mdl" )
+	self.Vehicle:SetKeyValue( "vehiclescript", "scripts/vehicles/prisoner_pod.txt" )
+	self.Vehicle:SetKeyValue( "limitview", 0 )
+	self.Vehicle:SetPos( self:GetPos() )
+	self.Vehicle:SetAngles( self:GetAngles() )
+	self.Vehicle:SetParent( self )
+	self.Vehicle:Spawn()
+	self.Vehicle:Activate()
 	
 	local phys = self:GetPhysicsObject()
 	if( IsValid( phys ) ) then
@@ -19,14 +29,11 @@ function ENT:Initialize()
 		
 	end
 	
-	ErrorNoHalt( self, "\n" )
-	
 end
 
 function ENT:Think()
 	
-	ErrorNoHalt( "Thinking\n" )
-	self:SetAngles( Angle( 0, CurTime() * 4, 0 ) )
+	self:SetAngles( Angle( 0, self:GetAngles().y + 1, 0 ) )
 	
 end
 
@@ -58,5 +65,8 @@ function ENT:SetPlayer( pl )
 	
 	self.dt.Player = pl
 	self.UniqueID = pl:UniqueID()
+	
+	pl.CanEnterVehicle = true
+	pl:EnterVehicle( self.Vehicle )
 	
 end

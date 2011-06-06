@@ -62,9 +62,8 @@ function ENT:AddPlayer( CPl )
 			local ang = chair:GetAngles()
 			-- ang:RotateAroundAxis( Vector( 0, 0, 1 ), 180 )
 			CPl:SetAngles( ang )
-			-- CPl:GetPlayer():SetPos( CPl:GetPos() )
-			-- CPl:GetPlayer():SetAngles( ang )
-			-- CPl:GetPlayer():SetEyeAngles( ang )
+			
+			self.Players[ i ] = CPl
 			
 			return true
 			

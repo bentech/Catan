@@ -2,6 +2,17 @@
 local Prefix = string.sub(GM.Folder, 11)
 local PrefixGamemode = Prefix.."/gamemode"
 
+local old_include = include
+local trace_include = true
+function include( filename )
+	
+	if( trace_include ) then
+		Msg("\tincluding "..filename,"\n")
+	end
+	old_include( filename )
+	
+end
+
 function AddCSLuaFolder( foldername )
 	Msg("AddCSLuaDirectory: "..foldername.."...\n")
 	for k,v in pairs(file.FindInLua(PrefixGamemode.."/"..foldername.."/*.lua")) do
@@ -14,12 +25,14 @@ end
 
 function includeFolder( foldername )
 	Msg("Loading "..foldername.." Files...\n")
+	trace_include = false
 	for k,v in pairs(file.FindInLua(PrefixGamemode.."/"..foldername.."/*.lua")) do
 		Msg("\tLoading "..v..":")
 		include(foldername.."/"..v)
 		Msg("Loaded Successfully\n")
 	end
 	Msg("Loaded Successfully\n")
+	trace_include = true
 end
 
 print( "#################################" )
@@ -74,3 +87,5 @@ print( "# Done loading shared files     #" )
 print( "#################################" )
 
 end
+
+include = old_include

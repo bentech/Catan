@@ -5,10 +5,6 @@ GM.PlayerManager.Players = {}
 function GM.PlayerMeta:SetCPlayer( CPl )
 	
 	self:SetNWEntity( "CPlayer", CPl )
-	-- self.CanEnterVehicle = true
-	self:SetPos( CPl:GetPos() )
-	-- self:SetParent( CPl )
-	-- self:EnterVehicle( CPl )
 	
 end
 
@@ -44,6 +40,7 @@ function GM:CanPlayerEnterVehicle( pl, vehicle )
 	
 	if( pl.CanEnterVehicle ) then
 		
+		ErrorNoHalt( "Entering vehicle\n" )
 		pl.CanEnterVehicle = false
 		return true
 		
@@ -94,9 +91,12 @@ function GM:AssociatePlayer( pl )
 		
 		--No player found, create a new one
 		local CPl = ents.Create( "CatanPlayer" )
+		CPl:Spawn()
+		CPl:SetPos( Vector( 0, 0, -CPl:OBBMins().z ) )
 		CPl:SetPlayer( pl )
 		pl:SetCPlayer( CPl )
 		pl:ChatPrint( "Welcome " .. pl:Name() )
+		CPl:Activate()
 		
 	end
 	
@@ -112,7 +112,7 @@ end
 
 function GM:PlayerSpawn( pl )
 	
-	pl:SetMoveType( MOVETYPE_NOCLIP )
+	-- pl:SetMoveType( MOVETYPE_NOCLIP )
 	
 end
 
