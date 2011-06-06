@@ -81,23 +81,53 @@ function GM:PlayerBindPress( pl, bind )
 	
 end
 
--- local function GetPlayerTrace( pl )
+local function GetPlayerTrace( pl )
 	
-	-- local intersectPos = intersectRayPlane( GAMEMODE.View.origin, GAMEMODE.View.origin + pl:GetCursorAimVector() * 2048, GAMEMODE.ViewOrigin, Vector( 0, 0, 1 ) )
-	-- return intersectPos
+	local intersectPos = intersectRayPlane( GAMEMODE.View.origin, GAMEMODE.View.origin + GAMEMODE.View.aim * 2048, GAMEMODE.ViewOrigin, Vector( 0, 0, 1 ) )
+	return intersectPos
 	
--- end
+end
 
--- function GM:CreateMove( cmd )
+function GM:RenderScreenspaceEffects()
 	
-	-- local CPl = LocalCPlayer()
-	-- if( ValidEntity( CPl ) ) then
-		
-		-- local tracePos = GetPlayerTrace( LocalPlayer() )
-		-- tracePos = tracePos * 1/16
-		-- tracePos = tracePos + GAMEMODE.skycampos
-		-- cmd:SetViewAngles( (EyePos() - tracePos):Angle() )
-		
-	-- end
+	GAMEMODE.View.aim = gui.ScreenToVector( gui.MouseX(), gui.MouseY() )
+	local Laser = Material( "cable/redlaser" )
 	
--- end
+	cam.Start3D( GAMEMODE.View.origin, GAMEMODE.View.angles )
+		
+		render.SetMaterial( Laser )
+		
+		local tracePos = GetPlayerTrace( LocalPlayer() )
+		
+		if( not tracePos ) then return end
+		local eyeattachment = LocalPlayer():LookupAttachment( "eyes" )
+		if ( eyeattachment == 0 ) then return end
+		local attachment = LocalPlayer():GetAttachment( eyeattachment )
+		if ( !attachment ) then return end
+		
+		render.DrawBeam( SkyboxToWorld( attachment.Pos ), tracePos, 5, 0, 0, Color( 255, 255, 255, 255 ) ) 
+		
+	cam.End3D()
+	
+end
+
+function GM:CreateMove( cmd )
+	
+	local CPl = LocalCPlayer()
+	if( ValidEntity( CPl ) ) then
+		
+		local tracePos = GetPlayerTrace( LocalPlayer() )
+		
+		if( not tracePos ) then return end
+		local eyeattachment = LocalPlayer():LookupAttachment( "eyes" )
+		if ( eyeattachment == 0 ) then return end
+		local attachment = LocalPlayer():GetAttachment( eyeattachment )
+		if ( !attachment ) then return end
+		
+		local ang = (tracePos - SkyboxToWorld(attachment.Pos)):Angle()
+		ang.y = ang.y - CPl:GetAngles().y + 90
+		cmd:SetViewAngles( ang )
+		
+	end
+	
+end
