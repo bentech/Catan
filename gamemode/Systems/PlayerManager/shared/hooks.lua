@@ -5,6 +5,30 @@ function GM:CalcMainActivity( ply, velocity )
 	return ply.CalcIdeal, ply.CalcSeqOverride
 end
 
+function GM:UpdateAnimation( pl, velocity, maxseqgroundspeed )
+	
+	if ( pl:InVehicle() ) then
+		
+		local Vehicle =  pl:GetVehicle()
+		
+		// We only need to do this clientside..
+		if ( CLIENT ) then
+			//
+			// This is used for the 'rollercoaster' arms
+			//
+			local Velocity = Vehicle:GetVelocity()
+			pl:SetPoseParameter( "vertical_velocity", Velocity.z * 0.01 ) 
+
+			// Pass the vehicles steer param down to the player
+			local steer = Vehicle:GetPoseParameter( "vehicle_steer" )
+			steer = steer * 2 - 1 // convert from 0..1 to -1..1
+			pl:SetPoseParameter( "vehicle_steer", steer  ) 
+		end
+		
+	end
+	
+end
+
 function GM.PlayerMeta:GetCPlayer()
 	
 	return self:GetNWEntity( "CPlayer" )

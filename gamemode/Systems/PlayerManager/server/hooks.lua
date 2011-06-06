@@ -92,11 +92,15 @@ function GM:AssociatePlayer( pl )
 		--No player found, create a new one
 		local CPl = ents.Create( "CatanPlayer" )
 		CPl:Spawn()
-		CPl:SetPos( Vector( 0, 0, -CPl:OBBMins().z ) )
-		CPl:SetPlayer( pl )
-		pl:SetCPlayer( CPl )
-		pl:ChatPrint( "Welcome " .. pl:Name() )
 		CPl:Activate()
+		CPl:SetPos( Vector( 0, 0, -CPl:OBBMins().z ) )
+		
+		timer.Simple( 0, function()
+			CPl:SetPlayer( pl )
+			pl:SetCPlayer( CPl )
+		end )
+		
+		pl:ChatPrint( "Welcome " .. pl:Name() )
 		
 	end
 	

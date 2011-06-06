@@ -39,6 +39,7 @@ print( "#################################" )
 print( "# Loading shared files          #" )
 
 include("enums.lua")
+include("utilities.lua")
 include("Systems/PlayerManager/shared/hooks.lua")
 
 print( "# Done loading shared files     #" )
@@ -56,6 +57,7 @@ AddCSLuaFolder( "Systems/TurnManager/shared" )
 AddCSLuaFolder( "Systems/Lobby/client" )
 AddCSLuaFolder( "Systems/Lobby/shared" )
 AddCSLuaFolder( "GUI" )
+AddCSLuaFile( "utilities.lua" )
 
 print( "# Done adding CSLua files       #" )
 print( "#################################" )

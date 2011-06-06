@@ -82,6 +82,12 @@ end
 function ENT:CanPlayerJoin( CPl )
 	
 	if( CPl:IsInGame() ) then return false end
+	if( self:GetState() ~= GAME_STATE.LOBBY ) then
+		
+		CPl:GetPlayer():ChatPrint( "The game has already started" )
+		return false
+		
+	end
 	return self:GetNumPlayers() < self:GetMaxPlayers()
 	
 end

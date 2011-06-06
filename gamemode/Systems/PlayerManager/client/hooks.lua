@@ -10,6 +10,7 @@ GM.MinViewDistance = 200
 GM.MaxViewDistance = 600
 GM.ViewAngle = Angle( 64, 0, 0 )
 GM.View = {}
+GM.View.origin = Vector()
 
 function GM:CalcVehicleThirdPersonView( Vehicle, ply, origin, angles, fov )
 
@@ -29,7 +30,7 @@ function GM:CalcView( pl, pos, angles, fov )
 												self.ViewDistance )
 		self.ViewAngle.p = (64-40) * (1 - (self.ViewDistance-self.MinViewDistance) / (self.MaxViewDistance-self.MinViewDistance)) + (40)
 		view.angles = self.ViewAngle
-		view.fov = 90
+		view.fov = fov
 	
 	return view
 	
@@ -61,12 +62,16 @@ end
 
 function GM:PrePlayerDraw( pl )
 	
-	-- local CPl = pl:GetCPlayer()
-	-- if( ValidEntity( CPl ) ) then
+	local CPl = pl:GetCPlayer()
+	if( ValidEntity( CPl ) ) then
 		
-		-- pl:SetRenderOrigin( CPl:LocalToWorld( Vector( 1000, 0, 0 ) ) )
+		if( not (CPl:IsInGame() or CPl:IsSpectatingGame()) ) then
+			
+			return true
+			
+		end
 		
-	-- end
+	end
 	
 end
 
@@ -76,13 +81,23 @@ function GM:PlayerBindPress( pl, bind )
 	
 end
 
-function GM:CreateMove( cmd )
+-- local function GetPlayerTrace( pl )
 	
-	local CPl = LocalCPlayer()
-	if( ValidEntity( CPl ) ) then
-		cmd:SetViewAngles( LocalCPlayer():GetAngles() )
-	else
-		cmd:SetViewAngles( Angle( 0 ) )
-	end
+	-- local intersectPos = intersectRayPlane( GAMEMODE.View.origin, GAMEMODE.View.origin + pl:GetCursorAimVector() * 2048, GAMEMODE.ViewOrigin, Vector( 0, 0, 1 ) )
+	-- return intersectPos
 	
-end
+-- end
+
+-- function GM:CreateMove( cmd )
+	
+	-- local CPl = LocalCPlayer()
+	-- if( ValidEntity( CPl ) ) then
+		
+		-- local tracePos = GetPlayerTrace( LocalPlayer() )
+		-- tracePos = tracePos * 1/16
+		-- tracePos = tracePos + GAMEMODE.skycampos
+		-- cmd:SetViewAngles( (EyePos() - tracePos):Angle() )
+		
+	-- end
+	
+-- end

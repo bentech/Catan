@@ -88,6 +88,7 @@ function ENT:SetupDataTables()
 	self:DTVar( "Int", 0, "PlayerID" )
 	self:DTVar( "Entity", 0, "Player" )
 	self:DTVar( "Entity", 1, "Game" )
+	self:DTVar( "Vector", 0, "EyeTarget" )
 	
 end
 
@@ -105,7 +106,13 @@ end
 
 function ENT:GetGame()
 	
-	return self:GetDTEntity( 1 )
+	return self.dt.Game
+	
+end
+
+function ENT:GetEyeTarget()
+	
+	return self.dt.EyeTarget
 	
 end
 
