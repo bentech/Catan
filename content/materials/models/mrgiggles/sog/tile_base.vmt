@@ -1,0 +1,6 @@
+"VertexLitGeneric"
+{
+	"$basetexture" "models\mrgiggles\sog\tile_base"
+	"$model" 1
+	"$envmapmode" 1
+}
