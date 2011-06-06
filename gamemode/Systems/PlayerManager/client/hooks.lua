@@ -4,6 +4,7 @@ usermessage.Hook( "SkyCamPos", function( um )
 	
 end )
 
+GM.skycampos = Vector( 4808, 247.9688, 0 )
 GM.ViewOrigin = Vector( 0, 0, 0 )
 GM.ViewDistance = 100
 GM.MinViewDistance = 200
@@ -11,10 +12,10 @@ GM.MaxViewDistance = 600
 GM.ViewAngle = Angle( 64, 0, 0 )
 GM.View = {}
 GM.View.origin = Vector()
+GM.View.angles = Angle()
+GM.View.aim = Vector()
 
-function GM:CalcVehicleThirdPersonView( Vehicle, ply, origin, angles, fov )
-
-end
+function GM:CalcVehicleThirdPersonView( Vehicle, ply, origin, angles, fov ) end
 
 function GM:CalcView( pl, pos, angles, fov )
 	
@@ -83,31 +84,8 @@ end
 
 local function GetPlayerTrace( pl )
 	
-	local intersectPos = intersectRayPlane( GAMEMODE.View.origin, GAMEMODE.View.origin + GAMEMODE.View.aim * 2048, GAMEMODE.ViewOrigin, Vector( 0, 0, 1 ) )
+	local intersectPos = intersectRayPlane( GAMEMODE.View.origin, GAMEMODE.View.origin + GAMEMODE.View.aim * 4096, GAMEMODE.ViewOrigin, Vector( 0, 0, 1 ) )
 	return intersectPos
-	
-end
-
-function GM:RenderScreenspaceEffects()
-	
-	GAMEMODE.View.aim = gui.ScreenToVector( gui.MouseX(), gui.MouseY() )
-	local Laser = Material( "cable/redlaser" )
-	
-	cam.Start3D( GAMEMODE.View.origin, GAMEMODE.View.angles )
-		
-		render.SetMaterial( Laser )
-		
-		local tracePos = GetPlayerTrace( LocalPlayer() )
-		
-		if( not tracePos ) then return end
-		local eyeattachment = LocalPlayer():LookupAttachment( "eyes" )
-		if ( eyeattachment == 0 ) then return end
-		local attachment = LocalPlayer():GetAttachment( eyeattachment )
-		if ( !attachment ) then return end
-		
-		render.DrawBeam( SkyboxToWorld( attachment.Pos ), tracePos, 5, 0, 0, Color( 255, 255, 255, 255 ) ) 
-		
-	cam.End3D()
 	
 end
 
@@ -122,10 +100,20 @@ function GM:CreateMove( cmd )
 		local eyeattachment = LocalPlayer():LookupAttachment( "eyes" )
 		if ( eyeattachment == 0 ) then return end
 		local attachment = LocalPlayer():GetAttachment( eyeattachment )
-		if ( !attachment ) then return end
+		if ( not attachment ) then return end
+		if ( not attachment.Pos ) then return end
 		
+		local currentyaw = cmd:GetViewAngles().y
 		local ang = (tracePos - SkyboxToWorld(attachment.Pos)):Angle()
-		ang.y = ang.y - CPl:GetAngles().y + 90
+		ang.y = ang.y - CPl:GetAngles().y
+		ang.y = math.NormalizeAngle( ang.y )
+		ang.y = math.Clamp( ang.y, -45, 45 )
+		ang.p = math.Clamp( ang.p, 0, 50 )
+		
+		ang.y = math.Approach( currentyaw, ang.y + 90, math.min( 1, currentyaw - ang.y ) )
+		
+		-- ErrorNoHalt( ang, "\n" )
+		
 		cmd:SetViewAngles( ang )
 		
 	end

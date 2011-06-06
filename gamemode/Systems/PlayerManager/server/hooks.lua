@@ -10,15 +10,6 @@ end
 
 function GM:PlayerInitialSpawn( pl )
 	
-	gamemode.Call( "AssociatePlayer", pl )
-	
-	pl:ChatPrint( "We don't have a UI yet, so use these commands instead." )
-	pl:ChatPrint( "/list to see a list of games" )
-	pl:ChatPrint( "/join [GameID] to join a game" )
-	pl:ChatPrint( "/spec [GameID] to spectate a game" )
-	pl:ChatPrint( "/create to create a game lobby" )
-	pl:ChatPrint( "/help to see available ingame commands" )
-	
 	self:SetupPlayerModel( pl )
 	
 	if( !host_player ) then
@@ -26,10 +17,6 @@ function GM:PlayerInitialSpawn( pl )
 		host_player = pl
 		
 	end
-	
-	umsg.Start( "SkyCamPos", pl )
-		umsg.Vector( self.skycam:GetPos() )
-	umsg.End()
 	
 	pl:SetHullDuck( Vector( -16, -16, 0 ), Vector( 16, 16, 72 ) )
 	-- pl:SetAllowFullRotation( true )
@@ -65,6 +52,29 @@ end
 function GM:SetupPlayerModel( pl )
 	
 	pl:SetModel( "models/Player/Group01/Male_01.mdl" )
+	
+end
+
+concommand.Add( "~cl_ready", function( pl )
+	
+	if (!ValidEntity( pl )) then return end
+	if pl.ready then return end
+	
+	pl.ready = true
+	gamemode.Call( "PlayerInitialized", pl )
+	
+end )
+
+function GM:PlayerInitialized( pl )
+	
+	gamemode.Call( "AssociatePlayer", pl )
+	
+	pl:ChatPrint( "We don't have a UI yet, so use these commands instead." )
+	pl:ChatPrint( "/list to see a list of games" )
+	pl:ChatPrint( "/join [GameID] to join a game" )
+	pl:ChatPrint( "/spec [GameID] to spectate a game" )
+	pl:ChatPrint( "/create to create a game lobby" )
+	pl:ChatPrint( "/help to see available ingame commands" )
 	
 end
 
@@ -111,6 +121,10 @@ end
 function GM:SendGameData( pl )
 	
 	--TODO: send any custom networked variables to the player, stuff that was sent with usermessages.
+	
+	umsg.Start( "SkyCamPos", pl )
+		umsg.Vector( self.skycam:GetPos() )
+	umsg.End()
 	
 end
 

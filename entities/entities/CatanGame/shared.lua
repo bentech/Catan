@@ -29,7 +29,7 @@ function ENT:GetMaxPlayers()
 	
 end
 
-function ENT:GetGameState()
+function ENT:GetState()
 	
 	return self.dt.GameState
 	

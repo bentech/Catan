@@ -33,7 +33,7 @@ function rpairs( t )
 		table.remove( keys, i )
 		return k, v
 	end
-
+	
 end
 
 function WorldToSkybox( pos )

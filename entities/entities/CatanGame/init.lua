@@ -25,6 +25,12 @@ function ENT:SetGameID( id )
 	
 end
 
+function ENT:OnDiceRolled( CPlayer, result )
+	
+	self.TurnManager:OnDiceRolled( CPlayer, result )
+	
+end
+
 ENUM( "GAME_STATE",
 	"LOBBY",
 	"STARTED"
@@ -45,6 +51,8 @@ function ENT:StartGame()
 	end
 	
 	self:SetState( GAME_STATE.STARTED )
+	
+	self.TurnManager = GAMEMODE.TurnManager:GetTurnManager( self )
 	
 end
 
@@ -73,6 +81,12 @@ function ENT:AddPlayer( CPl )
 	
 	Error( "Failed to Add Player ", CPl, " to the game!\n" )
 	return false
+	
+end
+
+function ENT:GetPlayers()
+	
+	return self.Players
 	
 end
 

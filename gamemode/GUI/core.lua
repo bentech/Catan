@@ -34,6 +34,19 @@ function GM:GUIMousePressed( mc )
 	
 end
 
+function GM:RenderScreenspaceEffects()
+	
+	local mx, my = gui.MousePos()
+	if( self.MouseDragging ) then
+		
+		mx, my = self.MouseX, self.MouseY
+		
+	end
+	
+	self.View.aim = gui.ScreenToVector( mx, my )
+	
+end
+
 function GM:GUIMouseMoved( dx, dy )
 	
 	if( not self.MouseDragging ) then return end

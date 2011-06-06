@@ -65,6 +65,14 @@ function ENT:SetPlayerID( id )
 	
 end
 
+function ENT:RollDie()
+	
+	timer.Simple( 4, function()
+		self:GetGame():OnDiceRolled( self, math.random( 1, 12 ) )
+	end )
+	
+end
+
 function ENT:SetEyeTarget( targetPos )
 	
 	self.dt.EyeTarget = targetPos
