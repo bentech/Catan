@@ -1,4 +1,4 @@
-concommand.Add( "list", function( pl, cmd, args )
+concommand.Add( "sog_list", function( pl, cmd, args )
 	
 	if( not ValidEntity( pl ) ) then return end
 	

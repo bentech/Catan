@@ -62,6 +62,26 @@ function Lobby:JoinGame( CPlayer, GameID, GamePass )
 	
 end
 
+function Lobby:LeaveGame( CPlayer )
+	
+	local CGame = CPlayer:GetGame()
+	if( not CGame ) then
+		
+		CPlayer:GetPlayer():ChatPrint( "You are not in a game" )
+		return
+		
+	end
+	
+	if( CGame:CanPlayerLeave( CPlayer ) ) then
+		
+		CGame:RemovePlayer( CPlayer )
+		
+		CPlayer:GetPlayer():ChatPrint( "You've successfully left the game." )
+		
+	end
+	
+end
+
 function Lobby:List( CPlayer )
 	
 	for ID, CGame in pairs( Lobby.Games ) do

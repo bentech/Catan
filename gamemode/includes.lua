@@ -47,47 +47,48 @@ print( "#################################" )
 
 if( SERVER ) then
 
-print( "#################################" )
-print( "# Adding CSLua files            #" )
+	print( "#################################" )
+	print( "# Adding CSLua files            #" )
 
-AddCSLuaFolder( "Systems/PlayerManager/client" )
-AddCSLuaFolder( "Systems/PlayerManager/shared" )
-AddCSLuaFolder( "Systems/TurnManager/client" )
-AddCSLuaFolder( "Systems/TurnManager/shared" )
-AddCSLuaFolder( "Systems/Lobby/client" )
-AddCSLuaFolder( "Systems/Lobby/shared" )
-AddCSLuaFolder( "GUI" )
-AddCSLuaFile( "utilities.lua" )
+	AddCSLuaFolder( "Systems/PlayerManager/client" )
+	AddCSLuaFolder( "Systems/PlayerManager/shared" )
+	AddCSLuaFolder( "Systems/TurnManager/client" )
+	AddCSLuaFolder( "Systems/TurnManager/shared" )
+	AddCSLuaFolder( "Systems/Lobby/client" )
+	AddCSLuaFolder( "Systems/Lobby/shared" )
+	AddCSLuaFolder( "GUI" )
+	AddCSLuaFile( "utilities.lua" )
 
-print( "# Done adding CSLua files       #" )
-print( "#################################" )
+	print( "# Done adding CSLua files       #" )
+	print( "#################################" )
 
-print( "#################################" )
-print( "# Loading serverside files      #" )
+	print( "#################################" )
+	print( "# Loading serverside files      #" )
 
-include("resources.lua")
-include("skybox.lua")
-include("hooks.lua")
+	include("resources.lua")
+	include("skybox.lua")
+	include("hooks.lua")
 
-include("Systems/PlayerManager/server/hooks.lua")
-includeFolder( "Systems/PlayerManager/server/commands" )
-include("Systems/Lobby/server/core.lua")
-includeFolder( "Systems/Lobby/server/commands" )
+	include("Systems/PlayerManager/server/hooks.lua")
+	includeFolder( "Systems/PlayerManager/server/commands" )
+	includeFolder( "../entities/entities/CatanGame/commands" )
+	include("Systems/Lobby/server/core.lua")
+	includeFolder( "Systems/Lobby/server/commands" )
 
-print( "# Done loading shared files     #" )
-print( "#################################" )
+	print( "# Done loading shared files     #" )
+	print( "#################################" )
 
 elseif( CLIENT ) then
 
-print( "#################################" )
-print( "# Loading clientside files      #" )
+	print( "#################################" )
+	print( "# Loading clientside files      #" )
 
-include("Systems/PlayerManager/client/core.lua")
-include("Systems/PlayerManager/client/hooks.lua")
-include("GUI/core.lua")
+	include("Systems/PlayerManager/client/core.lua")
+	include("Systems/PlayerManager/client/hooks.lua")
+	include("GUI/core.lua")
 
-print( "# Done loading shared files     #" )
-print( "#################################" )
+	print( "# Done loading shared files     #" )
+	print( "#################################" )
 
 end
 
