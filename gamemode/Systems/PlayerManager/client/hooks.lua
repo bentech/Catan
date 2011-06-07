@@ -6,7 +6,7 @@ end )
 
 GM.skycampos = Vector( 4808, 247.9688, 0 )
 GM.ViewOrigin = Vector( 0, 0, 0 )
-GM.ViewDistance = 100
+GM.ViewDistance = 400
 GM.MinViewDistance = 200
 GM.MaxViewDistance = 600
 GM.ViewAngle = Angle( 64, 0, 0 )
@@ -71,6 +71,10 @@ function GM:PrePlayerDraw( pl )
 			return true
 			
 		end
+		
+	else
+	
+		return true
 		
 	end
 	

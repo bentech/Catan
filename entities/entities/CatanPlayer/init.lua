@@ -55,7 +55,7 @@ end
 
 function ENT:UniqueID()
 	
-	return self.UniqueID
+	return self.UID
 	
 end
 
@@ -82,7 +82,7 @@ end
 function ENT:SetPlayer( pl )
 	
 	self.dt.Player = pl
-	self.UniqueID = pl:UniqueID()
+	self.UID = pl:UniqueID()
 	
 	pl.CanEnterVehicle = true
 	pl:EnterVehicle( self.Vehicle )

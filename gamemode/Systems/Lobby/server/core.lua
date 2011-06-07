@@ -9,6 +9,13 @@ local defaultMaxPlayers = 6
 
 function Lobby:CreateGame( CPlayerHost, MaxPlayers, GameName, GamePass )
 	
+	if( self:NumGames() > 0 ) then
+		
+		CPlayerHost:GetPlayer():ChatPrint( "Only one game at a time is currently supported" )
+		return
+		
+	end
+	
 	local CGame = ents.Create( "CatanGame" )
 	CGame:Spawn()
 	CGame:SetMaxPlayers( MaxPlayers or defaultMaxPlayers )
@@ -69,6 +76,18 @@ function Lobby:List( CPlayer )
 		CPlayer:GetPlayer():ChatPrint( str )
 		
 	end
+	
+end
+
+function Lobby:NumGames()
+	
+	return table.Count( Lobby.Games )
+	
+end
+
+function Lobby:RemoveGame( CGame )
+	
+	self.Games[ CGame:GameID() ] = nil
 	
 end
 
