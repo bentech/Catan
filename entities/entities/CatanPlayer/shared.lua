@@ -86,6 +86,7 @@ AccessorFuncNW( ENT, "victory_points", "VictoryPoints", FORCE_NUMBER )
 function ENT:SetupDataTables()
 	
 	self:DTVar( "Int", 0, "PlayerID" )
+	self:DTVar( "Int", 1, "Color" )
 	self:DTVar( "Entity", 0, "Player" )
 	self:DTVar( "Entity", 1, "Game" )
 	self:DTVar( "Vector", 0, "EyeTarget" )

@@ -51,7 +51,12 @@ end
 
 function GM:SetupPlayerModel( pl )
 	
-	pl:SetModel( "models/Player/Group01/Male_01.mdl" )
+	if ( math.random( 1, 2 ) == 1 ) then
+		pl:SetModel( "models/Player/Group01/Male_0" .. math.random( 1, 9 ) .. ".mdl" )
+	else
+		local r = math.random( 1, 7 ) if ( r == 5 ) then r = 6 end
+		pl:SetModel( "models/Player/Group01/Female_0" .. r .. ".mdl" )
+	end
 	
 end
 

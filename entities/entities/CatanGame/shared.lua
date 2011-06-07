@@ -40,3 +40,17 @@ function ENT:GetPlayerByID( id )
 	return self.Players[ id ]
 	
 end
+
+ENUM( "PlayerColor", "Red", "Blue", "Green", "Yellow", "White", "Black" )
+ENT.UsedColors = {}
+
+function ENT:RequestColor( CPlayer, Color_Enum )
+	
+	if ( CPlayer.dt.Color != 0 or self.UsedColors[Color_Enum] ) then return false end
+	
+	CPlayer.dt.Color = Color_Enum
+	self.UsedColors[Color_Enum] = true
+	
+	return true
+	
+end
