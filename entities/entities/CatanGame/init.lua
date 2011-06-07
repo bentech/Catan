@@ -2,6 +2,7 @@
 AddCSLuaFile("cl_init.lua")
 AddCSLuaFile("shared.lua")
 include("shared.lua")
+includeFolder( ENT.Folder.."/commands" )
 
 function ENT:Initialize()
 	
@@ -57,6 +58,16 @@ function ENT:StartGame()
 	
 end
 
+function ENT:ChatBroadcast( msg )
+	
+	for _, CPl in pairs( self.Players ) do
+		
+		CPl:ChatPrint( msg )
+		
+	end
+	
+end
+
 function ENT:GetPlayers()
 	
 	return self.Players
@@ -93,6 +104,8 @@ function ENT:AddPlayer( CPl )
 			
 			self.Players[ i ] = CPl
 			
+			self:OnPlayerJoined( CPl, CPl:GetName() )
+			
 			return true
 			
 		end
@@ -101,6 +114,19 @@ function ENT:AddPlayer( CPl )
 	
 	Error( "Failed to Add Player ", CPl, " to the game!\n" )
 	return false
+	
+end
+
+function ENT:OnPlayerJoined( CPl )
+	
+	if( not self:GetHost() ) then
+		
+		self:SetHost( CPl )
+		CPl:ChatPrint( "You are now the host." )
+		
+	end
+	
+	self:ChatBroadcast( "Player " .. tostring( CPl:GetName() ) .. " has joined the game." )
 	
 end
 
@@ -128,9 +154,49 @@ end
 function ENT:RemovePlayer( CPl )
 	
 	assert( self:HasPlayer( CPl ) )
+	self.Players[ CPl:PlayerID() ] = nil
+	
 	CPl:SetGame( NULL )
 	CPl:SetPlayerID( 0 )
-	self.Players[ CPl:PlayerID() ] = nil
+	
+	self:OnPlayerLeft( CPl )
+	
+end
+
+function ENT:OnPlayerLeft( CPl )
+	
+	if( self:GetHost() == CPl ) then
+		
+		if( not self:FindNewHost() ) then
+			
+			--TODO: Start lifetime timer and remove this game after 1 minute
+			--The lobby should purge all games that have no players for 1 minute
+			
+		end
+		
+	end
+	
+	self:ChatBroadcast( "Player " .. tostring(CPl:GetName()) .. " has left the game" )
+	
+end
+
+function ENT:FindNewHost()
+	
+	ErrorNoHalt( "Removing game host\n" )
+	self:SetHost( nil )
+	
+	for _, CPl in pairs( self.Players ) do
+		
+		if( ValidEntity( CPl ) ) then
+			
+			self:SetHost( CPl )
+			CPl:ChatPrint( "You are now the game's host" )
+			
+			return true
+			
+		end
+		
+	end
 	
 end
 
