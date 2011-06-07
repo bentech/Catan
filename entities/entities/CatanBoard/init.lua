@@ -16,7 +16,7 @@ end
 
 function ENT:Initialize()
 	
-	self.Tiles = {}
+	self:SharedInitialize()
 	self:CreateTiles()
 	
 end

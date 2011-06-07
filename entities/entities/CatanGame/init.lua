@@ -33,6 +33,7 @@ end
 
 ENUM( "GAME_STATE",
 	"LOBBY",
+	"STARTING",
 	"STARTED"
 	)
 
@@ -53,6 +54,25 @@ function ENT:StartGame()
 	self:SetState( GAME_STATE.STARTED )
 	
 	self.TurnManager = GAMEMODE.TurnManager:GetTurnManager( self )
+	
+end
+
+function ENT:GetPlayers()
+	
+	return self.Players
+	
+end
+
+function ENT:CanPlayerJoin( CPl )
+	
+	if( CPl:IsInGame() ) then return false end
+	if( self:GetState() ~= GAME_STATE.LOBBY ) then
+		
+		CPl:GetPlayer():ChatPrint( "The game has already started" )
+		return false
+		
+	end
+	return self:GetNumPlayers() < self:GetMaxPlayers()
 	
 end
 
@@ -84,25 +104,33 @@ function ENT:AddPlayer( CPl )
 	
 end
 
-function ENT:GetPlayers()
+function ENT:HasPlayer( CPl )
 	
-	return self.Players
+	if( not CPl ) then return end
+	if( not CPl:IsInGame() ) then return end
+	return self.Players[ CPl:PlayerID() ] == CPl
+	
+end
+
+function ENT:CanPlayerLeave( CPl )
+	
+	assert( self:HasPlayer( CPl ) )
+	if( self:GetState() == GAME_STATE.STARTED ) then
+		
+		CPl:GetPlayer():ChatPrint( "You cannot leave a game in progress. Try requesting a forfeit." )
+		return false
+		
+	end
+	return true
 	
 end
 
 function ENT:RemovePlayer( CPl )
-end
-
-function ENT:CanPlayerJoin( CPl )
 	
-	if( CPl:IsInGame() ) then return false end
-	if( self:GetState() ~= GAME_STATE.LOBBY ) then
-		
-		CPl:GetPlayer():ChatPrint( "The game has already started" )
-		return false
-		
-	end
-	return self:GetNumPlayers() < self:GetMaxPlayers()
+	assert( self:HasPlayer( CPl ) )
+	CPl:SetGame( NULL )
+	CPl:SetPlayerID( 0 )
+	self.Players[ CPl:PlayerID() ] = nil
 	
 end
 
