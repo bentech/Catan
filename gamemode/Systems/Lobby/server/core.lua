@@ -37,7 +37,7 @@ end
 
 function Lobby:JoinGame( CPlayer, GameID, GamePass )
 	
-	local CGame = self.GetGameByID( GameID )
+	local CGame = self:GetGameByID( GameID )
 	if( not CGame ) then
 		
 		CPlayer:GetPlayer():ChatPrint( "Invalid GameID: Could not find game" )
@@ -111,11 +111,11 @@ function Lobby:RemoveGame( CGame )
 	
 end
 
-function Lobby.GetGameByID( id )
+function Lobby:GetGameByID( id )
 	
 	id = tonumber( id )
 	
-	for ID, CGame in pairs( Lobby.Games ) do
+	for ID, CGame in pairs( self.Games ) do
 		
 		if( ID == id ) then
 			
