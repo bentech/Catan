@@ -15,7 +15,7 @@ end
 
 function AddCSLuaFolder( foldername )
 	Msg("AddCSLuaDirectory: "..foldername.."...\n")
-	for k,v in pairs(file.FindInLua(PrefixGamemode.."/"..foldername.."/*.lua")) do
+	for k,v in pairs(file.FindInLua( foldername.."/*.lua")) do
 		Msg("\tAddCSLuaFile "..v..":")
 		AddCSLuaFile(foldername.."/"..v)
 		Msg("Successful\n")
@@ -26,7 +26,7 @@ end
 function includeFolder( foldername )
 	Msg("Loading "..foldername.." Files...\n")
 	trace_include = false
-	for k,v in pairs(file.FindInLua(PrefixGamemode.."/"..foldername.."/*.lua")) do
+	for k,v in pairs(file.FindInLua( foldername.."/*.lua")) do
 		Msg("\tLoading "..v..":")
 		include(foldername.."/"..v)
 		Msg("Loaded Successfully\n")
@@ -50,13 +50,13 @@ if( SERVER ) then
 	print( "#################################" )
 	print( "# Adding CSLua files            #" )
 
-	AddCSLuaFolder( "Systems/PlayerManager/client" )
-	AddCSLuaFolder( "Systems/PlayerManager/shared" )
-	AddCSLuaFolder( "Systems/TurnManager/client" )
-	AddCSLuaFolder( "Systems/TurnManager/shared" )
-	AddCSLuaFolder( "Systems/Lobby/client" )
-	AddCSLuaFolder( "Systems/Lobby/shared" )
-	AddCSLuaFolder( "GUI" )
+	AddCSLuaFolder( PrefixGamemode.."/Systems/PlayerManager/client" )
+	AddCSLuaFolder( PrefixGamemode.."/Systems/PlayerManager/shared" )
+	AddCSLuaFolder( PrefixGamemode.."/Systems/TurnManager/client" )
+	AddCSLuaFolder( PrefixGamemode.."/Systems/TurnManager/shared" )
+	AddCSLuaFolder( PrefixGamemode.."/Systems/Lobby/client" )
+	AddCSLuaFolder( PrefixGamemode.."/Systems/Lobby/shared" )
+	AddCSLuaFolder( PrefixGamemode.."/GUI" )
 	AddCSLuaFile( "utilities.lua" )
 
 	print( "# Done adding CSLua files       #" )
@@ -70,10 +70,9 @@ if( SERVER ) then
 	include("hooks.lua")
 
 	include("Systems/PlayerManager/server/hooks.lua")
-	includeFolder( "Systems/PlayerManager/server/commands" )
-	includeFolder( "../entities/entities/CatanGame/commands" )
+	includeFolder( PrefixGamemode.."/Systems/PlayerManager/server/commands" )
 	include("Systems/Lobby/server/core.lua")
-	includeFolder( "Systems/Lobby/server/commands" )
+	includeFolder( PrefixGamemode.."/Systems/Lobby/server/commands" )
 
 	print( "# Done loading shared files     #" )
 	print( "#################################" )

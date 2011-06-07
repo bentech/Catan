@@ -65,7 +65,7 @@ end
 function Lobby:LeaveGame( CPlayer )
 	
 	local CGame = CPlayer:GetGame()
-	if( not CGame ) then
+	if( not ValidEntity( CGame ) ) then
 		
 		CPlayer:GetPlayer():ChatPrint( "You are not in a game" )
 		return
