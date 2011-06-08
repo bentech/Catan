@@ -1,4 +1,4 @@
-concommand.Add( "join", function( pl, cmd, args )
+concommand.Add( "sog_join", function( pl, cmd, args )
 	
 	if( not ValidEntity( pl ) ) then return end
 	

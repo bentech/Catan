@@ -9,7 +9,7 @@ function addResourceDirectory(Dir)
 		local File = Dir.."/"..v
 		if(file.IsDir(PrefixContent.."/"..File)) then
 			FoundDir = true
-			self:AddResourceDirectory(File)
+			addResourceDirectory(File)
 		elseif(!string.find(v, ".bz2", 1, true) and !string.find(v, ".bat", 1, true)) then
 			Msg("\tresource.AddFile "..File..":")
 			resource.AddFile(File)

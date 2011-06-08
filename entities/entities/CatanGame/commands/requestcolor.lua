@@ -1,4 +1,4 @@
-concommand.Add( "requestcolor", function( pl, cmd, args )
+concommand.Add( "sog_requestcolor", function( pl, cmd, args )
 	
 	if( not ValidEntity( pl ) ) then return end
 	

@@ -47,6 +47,24 @@ function ENT:UpdateTransmitState()
 	
 end
 
+function ENT:IsGameHost()
+	
+	if( not self:IsInGame() ) then return end
+	return self:GetGame():GetHost() == self
+	
+end
+
+function ENT:ChatPrint( msg )
+	
+	local pl = self:GetPlayer()
+	if( ValidEntity( pl ) ) then
+		
+		pl:ChatPrint( msg )
+		
+	end
+	
+end
+
 function ENT:SetGame( CGame )
 	
 	self.dt.Game = CGame
@@ -55,7 +73,7 @@ end
 
 function ENT:UniqueID()
 	
-	return self.UniqueID
+	return self.UID
 	
 end
 
@@ -82,9 +100,10 @@ end
 function ENT:SetPlayer( pl )
 	
 	self.dt.Player = pl
-	self.UniqueID = pl:UniqueID()
+	self.UID = pl:UniqueID()
 	
 	pl.CanEnterVehicle = true
 	pl:EnterVehicle( self.Vehicle )
+	self:SetName( pl:GetName() )
 	
 end

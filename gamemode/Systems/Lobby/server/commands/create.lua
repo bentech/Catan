@@ -1,4 +1,4 @@
-concommand.Add( "create", function( pl, cmd, args )
+concommand.Add( "sog_create", function( pl, cmd, args )
 	
 	if( not ValidEntity( pl ) ) then return end
 	

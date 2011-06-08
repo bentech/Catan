@@ -2,7 +2,9 @@
 AddCSLuaFile("cl_init.lua")
 AddCSLuaFile("shared.lua")
 include("shared.lua")
-include("commands/requestcolor.lua")
+include( "commands/requestcolor.lua" )
+include( "commands/forfeit.lua" )
+include( "commands/start.lua" )
 
 function ENT:Initialize()
 	
@@ -34,6 +36,7 @@ end
 
 ENUM( "GAME_STATE",
 	"LOBBY",
+	"STARTING",
 	"STARTED"
 	)
 
@@ -57,6 +60,35 @@ function ENT:StartGame()
 	
 end
 
+function ENT:ChatBroadcast( msg )
+	
+	for _, CPl in pairs( self.Players ) do
+		
+		CPl:ChatPrint( msg )
+		
+	end
+	
+end
+
+function ENT:GetPlayers()
+	
+	return self.Players
+	
+end
+
+function ENT:CanPlayerJoin( CPl )
+	
+	if( CPl:IsInGame() ) then return false end
+	if( self:GetState() ~= GAME_STATE.LOBBY ) then
+		
+		CPl:GetPlayer():ChatPrint( "The game has already started" )
+		return false
+		
+	end
+	return self:GetNumPlayers() < self:GetMaxPlayers()
+	
+end
+
 function ENT:AddPlayer( CPl )
 	
 	for i = 1, self:GetMaxPlayers() do
@@ -74,6 +106,8 @@ function ENT:AddPlayer( CPl )
 			
 			self.Players[ i ] = CPl
 			
+			self:OnPlayerJoined( CPl, CPl:GetName() )
+			
 			return true
 			
 		end
@@ -85,25 +119,86 @@ function ENT:AddPlayer( CPl )
 	
 end
 
-function ENT:GetPlayers()
+function ENT:OnPlayerJoined( CPl )
 	
-	return self.Players
+	if( not self:GetHost() ) then
+		
+		self:SetHost( CPl )
+		CPl:ChatPrint( "You are now the host." )
+		
+	end
+	
+	self:ChatBroadcast( "Player " .. tostring( CPl:GetName() ) .. " has joined the game." )
+	
+end
+
+function ENT:HasPlayer( CPl )
+	
+	if( not CPl ) then return end
+	if( not CPl:IsInGame() ) then return end
+	return self.Players[ CPl:PlayerID() ] == CPl
+	
+end
+
+function ENT:CanPlayerLeave( CPl )
+	
+	assert( self:HasPlayer( CPl ) )
+	if( self:GetState() == GAME_STATE.STARTED ) then
+		
+		CPl:GetPlayer():ChatPrint( "You cannot leave a game in progress. Try requesting a forfeit." )
+		return false
+		
+	end
+	return true
 	
 end
 
 function ENT:RemovePlayer( CPl )
+	
+	assert( self:HasPlayer( CPl ) )
+	self.Players[ CPl:PlayerID() ] = nil
+	
+	CPl:SetGame( NULL )
+	CPl:SetPlayerID( 0 )
+	
+	self:OnPlayerLeft( CPl )
+	
 end
 
-function ENT:CanPlayerJoin( CPl )
+function ENT:OnPlayerLeft( CPl )
 	
-	if( CPl:IsInGame() ) then return false end
-	if( self:GetState() ~= GAME_STATE.LOBBY ) then
+	if( self:GetHost() == CPl ) then
 		
-		CPl:GetPlayer():ChatPrint( "The game has already started" )
-		return false
+		if( not self:FindNewHost() ) then
+			
+			--TODO: Start lifetime timer and remove this game after 1 minute
+			--The lobby should purge all games that have no players for 1 minute
+			
+		end
 		
 	end
-	return self:GetNumPlayers() < self:GetMaxPlayers()
+	
+	self:ChatBroadcast( "Player " .. tostring(CPl:GetName()) .. " has left the game" )
+	
+end
+
+function ENT:FindNewHost()
+	
+	ErrorNoHalt( "Removing game host\n" )
+	self:SetHost( nil )
+	
+	for _, CPl in pairs( self.Players ) do
+		
+		if( ValidEntity( CPl ) ) then
+			
+			self:SetHost( CPl )
+			CPl:ChatPrint( "You are now the game's host" )
+			
+			return true
+			
+		end
+		
+	end
 	
 end
 

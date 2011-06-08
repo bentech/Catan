@@ -2,6 +2,8 @@
 GM.PlayerManager = {}
 GM.PlayerManager.Players = {}
 
+local PlayerManager = GM.PlayerManager
+
 function GM.PlayerMeta:SetCPlayer( CPl )
 	
 	self:SetNWEntity( "CPlayer", CPl )
@@ -49,6 +51,24 @@ function GM.PlayerManager.GetPlayers()
 	
 end
 
+function GM.PlayerManager.CreatePlayer( pl, uid )
+	
+	local CPl = ents.Create( "CatanPlayer" )
+	CPl:Spawn()
+	CPl:Activate()
+	CPl:SetPos( Vector( 0, 0, -CPl:OBBMins().z ) )
+	
+	timer.Simple( 0, function()
+		CPl:SetPlayer( pl )
+		pl:SetCPlayer( CPl )
+	end )
+	
+	PlayerManager.Players[ uid ] = CPl
+	
+	pl:ChatPrint( "Welcome " .. pl:Name() )
+	
+end
+
 function GM:SetupPlayerModel( pl )
 	
 	if ( math.random( 1, 2 ) == 1 ) then
@@ -86,10 +106,12 @@ end
 function GM:AssociatePlayer( pl )
 	
 	local associated = false
-	
+	local uid = pl:UniqueID()
 	for _, CPl in pairs( self.PlayerManager.GetPlayers() ) do
 		
-		if( CPl:UniqueID() == pl:UniqueID() ) then
+		ErrorNoHalt( CPl:UniqueID(), uid, "\n" )
+		
+		if( CPl:UniqueID() == uid ) then
 			
 			associated = true
 			
@@ -105,17 +127,7 @@ function GM:AssociatePlayer( pl )
 	if( not associated ) then
 		
 		--No player found, create a new one
-		local CPl = ents.Create( "CatanPlayer" )
-		CPl:Spawn()
-		CPl:Activate()
-		CPl:SetPos( Vector( 0, 0, -CPl:OBBMins().z ) )
-		
-		timer.Simple( 0, function()
-			CPl:SetPlayer( pl )
-			pl:SetCPlayer( CPl )
-		end )
-		
-		pl:ChatPrint( "Welcome " .. pl:Name() )
+		self.PlayerManager.CreatePlayer( pl, uid )
 		
 	end
 	

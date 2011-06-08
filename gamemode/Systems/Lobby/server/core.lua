@@ -9,6 +9,13 @@ local defaultMaxPlayers = 6
 
 function Lobby:CreateGame( CPlayerHost, MaxPlayers, GameName, GamePass )
 	
+	if( self:NumGames() > 0 ) then
+		
+		CPlayerHost:GetPlayer():ChatPrint( "Only one game at a time is currently supported" )
+		return
+		
+	end
+	
 	local CGame = ents.Create( "CatanGame" )
 	CGame:Spawn()
 	CGame:SetMaxPlayers( MaxPlayers or defaultMaxPlayers )
@@ -55,6 +62,26 @@ function Lobby:JoinGame( CPlayer, GameID, GamePass )
 	
 end
 
+function Lobby:LeaveGame( CPlayer )
+	
+	local CGame = CPlayer:GetGame()
+	if( not ValidEntity( CGame ) ) then
+		
+		CPlayer:GetPlayer():ChatPrint( "You are not in a game" )
+		return
+		
+	end
+	
+	if( CGame:CanPlayerLeave( CPlayer ) ) then
+		
+		CGame:RemovePlayer( CPlayer )
+		
+		CPlayer:GetPlayer():ChatPrint( "You've successfully left the game." )
+		
+	end
+	
+end
+
 function Lobby:List( CPlayer )
 	
 	for ID, CGame in pairs( Lobby.Games ) do
@@ -72,11 +99,23 @@ function Lobby:List( CPlayer )
 	
 end
 
+function Lobby:NumGames()
+	
+	return table.Count( Lobby.Games )
+	
+end
+
+function Lobby:RemoveGame( CGame )
+	
+	self.Games[ CGame:GameID() ] = nil
+	
+end
+
 function Lobby:GetGameByID( id )
 	
 	id = tonumber( id )
 	
-	for ID, CGame in pairs( Lobby.Games ) do
+	for ID, CGame in pairs( self.Games ) do
 		
 		if( ID == id ) then
 			
