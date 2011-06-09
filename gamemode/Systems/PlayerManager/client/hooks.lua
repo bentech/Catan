@@ -93,30 +93,65 @@ local function GetPlayerTrace( pl )
 	
 end
 
+local lastPlayerToTalk
+local lastTimePlayerTalked
+function GM:OnPlayerChat( pl, txt, bTeam, bDead )
+	
+	lastPlayerToTalk = pl
+	lastTimePlayerTalked = CurTime()
+	-- chat.AddText( ply, Color( 255, 255, 255 ), ": "..txt )
+	
+end
+
 function GM:CreateMove( cmd )
 	
 	local CPl = LocalCPlayer()
 	if( ValidEntity( CPl ) ) then
 		
-		local tracePos = GetPlayerTrace( LocalPlayer() )
+		local ang
 		
-		if( not tracePos ) then return end
-		local eyeattachment = LocalPlayer():LookupAttachment( "eyes" )
-		if ( eyeattachment == 0 ) then return end
-		local attachment = LocalPlayer():GetAttachment( eyeattachment )
-		if ( not attachment ) then return end
-		if ( not attachment.Pos ) then return end
-		
-		local currentyaw = cmd:GetViewAngles().y
-		local ang = (tracePos - SkyboxToWorld(attachment.Pos)):Angle()
-		ang.y = ang.y - CPl:GetAngles().y
-		ang.y = math.NormalizeAngle( ang.y )
-		ang.y = math.Clamp( ang.y, -45, 45 )
-		ang.p = math.Clamp( ang.p, 0, 50 )
-		
-		ang.y = math.Approach( currentyaw, ang.y + 90, math.min( 1, currentyaw - ang.y ) )
-		
-		-- ErrorNoHalt( ang, "\n" )
+		if( ValidEntity( lastPlayerToTalk ) and lastPlayerToTalk ~= LocalPlayer() and CurTime() - lastTimePlayerTalked < 2 ) then
+			
+			local eyeattachment = lastPlayerToTalk:LookupAttachment( "eyes" )
+			if ( eyeattachment == 0 ) then return end
+			local attachment = lastPlayerToTalk:GetAttachment( eyeattachment )
+			if ( not attachment ) then return end
+			if ( not attachment.Pos ) then return end
+			local eyeattachment = LocalPlayer():LookupAttachment( "eyes" )
+			if ( eyeattachment == 0 ) then return end
+			local attachment2 = LocalPlayer():GetAttachment( eyeattachment )
+			if ( not attachment2 ) then return end
+			if ( not attachment2.Pos ) then return end
+			ang = ( attachment.Pos - attachment2.Pos ):Angle()
+			ang.y = ang.y - CPl:GetAngles().y
+			ang.y = math.NormalizeAngle( ang.y )
+			ang.y = math.Clamp( ang.y, -45, 45 )
+			ang.p = math.Clamp( ang.p, 0, 50 )
+			
+			local currentyaw = cmd:GetViewAngles().y
+			ang.y = Lerp( 0.5, currentyaw, ang.y + 90 )
+			
+		else
+			
+			local tracePos = GetPlayerTrace( LocalPlayer() )
+			
+			if( not tracePos ) then return end
+			local eyeattachment = LocalPlayer():LookupAttachment( "eyes" )
+			if ( eyeattachment == 0 ) then return end
+			local attachment = LocalPlayer():GetAttachment( eyeattachment )
+			if ( not attachment ) then return end
+			if ( not attachment.Pos ) then return end
+			
+			ang = (tracePos - SkyboxToWorld(attachment.Pos)):Angle()
+			ang.y = ang.y - CPl:GetAngles().y
+			ang.y = math.NormalizeAngle( ang.y )
+			ang.y = math.Clamp( ang.y, -45, 45 )
+			ang.p = math.Clamp( ang.p, 0, 50 )
+			
+			local currentyaw = cmd:GetViewAngles().y
+			ang.y = math.Approach( currentyaw, ang.y + 90, math.min( 1, currentyaw - ang.y ) )
+			
+		end
 		
 		cmd:SetViewAngles( ang )
 		

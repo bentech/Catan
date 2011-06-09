@@ -110,6 +110,12 @@ function GM:PlayerInitialized( pl )
 	
 end
 
+function GM:PlayerSay( pl, txt, bWorldChat )
+	
+	return txt
+	
+end
+
 function GM:AssociatePlayer( pl )
 	
 	local associated = false
