@@ -71,6 +71,7 @@ if( SERVER ) then
 	include("hooks.lua")
 
 	include("Systems/PlayerManager/server/hooks.lua")
+	include("Systems/TurnManager/server/core.lua")
 	includeFolder( "Systems/PlayerManager/server/commands" )
 	include("Systems/Lobby/server/core.lua")
 	includeFolder( "Systems/Lobby/server/commands" )

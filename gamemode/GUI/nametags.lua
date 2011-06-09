@@ -6,9 +6,9 @@ function GM:PostDrawOpaqueRenderables()
 			[PlayerColor.Red] = Color( 255, 0, 0 ),
 			[PlayerColor.Blue] = Color( 0, 0, 255 ),
 			[PlayerColor.Green] = Color( 0, 255, 0 ),
-			[PlayerColor.Yellow] = Color( 255, 255, 0 ),
+			[PlayerColor.Orange] = Color( 255, 140, 0 ),
 			[PlayerColor.White] = Color( 255, 255, 255 ),
-			[PlayerColor.Black] = Color( 0, 0, 0 )
+			[PlayerColor.Brown] = Color( 139, 69, 19 )
 		}
 	end
 	if ( !COLORS ) then return end

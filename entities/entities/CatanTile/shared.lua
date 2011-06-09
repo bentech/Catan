@@ -8,7 +8,12 @@ ENT.Corners = {}
 function ENT:SetupDataTables()
 	self:DTVar( "Int", 0, "X" )
 	self:DTVar( "Int", 1, "Y" )
+	self:DTVar( "Int", 2, "TerrainType" )
 	self:DTVar( "Entity", 0, "Board" )
+end
+
+function ENT:GetTerrain()
+	return self.dt.TerrainType
 end
 
 function ENT:GetX()

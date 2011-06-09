@@ -5,10 +5,11 @@ include("shared.lua")
 include( "commands/requestcolor.lua" )
 include( "commands/forfeit.lua" )
 include( "commands/start.lua" )
+include( "commands/ready.lua" )
 
 function ENT:Initialize()
 	
-	self.Players = {}
+	self:SharedInitialize()
 	self.Board = NewBoard( self )
 	
 end
@@ -30,6 +31,7 @@ end
 
 function ENT:OnDiceRolled( CPlayer, result )
 	
+	self:ChatBroadcast( CPlayer:GetName() .. " has rolled a " .. result )
 	self.TurnManager:OnDiceRolled( CPlayer, result )
 	
 end
@@ -47,6 +49,12 @@ function ENT:SetState( game_state )
 end
 
 function ENT:StartGame()
+
+	if( self:GetState() ~= GAME_STATE.LOBBY ) then
+		
+		return false, "The game was already started"
+		
+	end
 	
 	if( self:GetNumPlayers() < 2 ) then
 		
@@ -54,25 +62,53 @@ function ENT:StartGame()
 		
 	end
 	
-	self:SetState( GAME_STATE.STARTED )
+	if( not self:IsEveryoneReady() ) then
+		
+		return false, "Not everyone is ready"
+		
+	end
+	
+	self:SetState( GAME_STATE.STARTING )
 	
 	self.TurnManager = GAMEMODE.TurnManager:GetTurnManager( self )
+	
+	self:ChatBroadcast( "The game is starting in 5 seconds" )
+	timer.Simple( 5, self.Start, self )
+	
+	return true
+	
+end
+
+function ENT:Start()
+	
+	self:ChatBroadcast( "The game has started" )
+	self.TurnManager:OnGameStarted()
+	
+end
+
+function ENT:IsEveryoneReady()
+	
+	for _, CPl in pairs( self:GetPlayers() ) do
+		
+		if( not CPl:IsReady() ) then
+			
+			return false
+			
+		end
+		
+	end
+	
+	return true
 	
 end
 
 function ENT:ChatBroadcast( msg )
 	
-	for _, CPl in pairs( self.Players ) do
+	for _, CPl in pairs( self:GetPlayers() ) do
 		
 		CPl:ChatPrint( msg )
 		
 	end
-	
-end
-
-function ENT:GetPlayers()
-	
-	return self.Players
 	
 end
 
@@ -119,6 +155,25 @@ function ENT:AddPlayer( CPl )
 	
 end
 
+function ENT:GetRecipientFilter()
+	
+	local rf = RecipientFilter()
+	for _, CPl in pairs( self:GetPlayers() ) do
+		
+		rf:AddPlayer( CPl:GetPlayer() )
+		
+	end
+	
+	for _, CPl in pairs( self:GetSpectators() ) do
+		
+		rf:AddPlayer( CPl:GetPlayer() )
+		
+	end
+	
+	return rf
+	
+end
+
 function ENT:OnPlayerJoined( CPl )
 	
 	if( not self:GetHost() ) then
@@ -128,7 +183,46 @@ function ENT:OnPlayerJoined( CPl )
 		
 	end
 	
+	self:SetNumPlayers( self:GetNumPlayers() + 1 )
+	
 	self:ChatBroadcast( "Player " .. tostring( CPl:GetName() ) .. " has joined the game." )
+	
+end
+
+function ENT:OnPlayerReady( CPl, bReady )
+	
+	self:ChatBroadcast( "Player " .. CPl:GetName() .. " is " ..tostring( bReady and "now" or "no longer" ) .. " ready." )
+	
+end
+
+function ENT:RequestColor( CPlayer, Color_Enum )
+	
+	if( not self:HasPlayer( CPlayer ) ) then return end
+	
+	if( self:GetState() ~= GAME_STATE.LOBBY ) then
+		
+		CPlayer:ChatPrint( "You cannot change colors after the game has started" )
+		return
+		
+	end
+		
+	if( ValidEntity( self.UsedColors[ Color_Enum ] ) ) then
+		
+		CPlayer:ChatPrint( "Another player already has that color" )
+		return
+		
+	end
+	
+	if( self.UsedColors[ CPlayer.dt.Color ] == CPlayer ) then
+		
+		self.UsedColors[ CPlayer.dt.Color ] = nil
+		
+	end
+	
+	CPlayer:SetColorID( Color_Enum )
+	self.UsedColors[ Color_Enum ] = CPlayer
+	
+	return true
 	
 end
 
@@ -158,8 +252,15 @@ function ENT:RemovePlayer( CPl )
 	assert( self:HasPlayer( CPl ) )
 	self.Players[ CPl:PlayerID() ] = nil
 	
+	if( self.UsedColors[ CPl:ColorID() ] == CPl ) then
+		
+		self.UserColors[ CPl:ColorID() ] = nil
+		
+	end
+	
 	CPl:SetGame( NULL )
 	CPl:SetPlayerID( 0 )
+	CPl:SetColorID( 0 )
 	
 	self:OnPlayerLeft( CPl )
 	
@@ -177,6 +278,15 @@ function ENT:OnPlayerLeft( CPl )
 		end
 		
 	end
+	
+	if( self:GetState() == GAME_STATE.STARTING ) then
+		
+		self:ChatBroadcast( "The start was interrupted" )
+		self:SetState( GAME_STATE.LOBBY )
+		
+	end
+	
+	self:SetNumPlayers( self:GetNumPlayers() - 1 )
 	
 	self:ChatBroadcast( "Player " .. tostring(CPl:GetName()) .. " has left the game" )
 	
@@ -199,6 +309,12 @@ function ENT:FindNewHost()
 		end
 		
 	end
+	
+end
+
+function ENT:SetNumPlayers( num )
+	
+	self.dt.NumPlayers = num
 	
 end
 

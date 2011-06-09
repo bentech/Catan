@@ -7,16 +7,21 @@ concommand.Add( "sog_start", function( pl, cmd, args )
 	
 	if( not CPl:IsInGame() ) then
 		
-		CPl:GetPlayer():ChatPrint( "You are not in a game" )
+		pl:ChatPrint( "You are not in a game" )
 		return
 		
 	end
 	
 	if( not CPl:IsGameHost() ) then
 		
-		CPl:GetPlayer():ChatPrint( "You are not the game host" )
+		pl:ChatPrint( "You are not the game host" )
 		return
 		
+	end
+	
+	local started, message = CPl:GetGame():StartGame()
+	if( not started ) then
+		pl:ChatPrint( message )
 	end
 	
 end )

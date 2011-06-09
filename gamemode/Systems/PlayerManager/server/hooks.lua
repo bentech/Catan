@@ -51,6 +51,13 @@ function GM.PlayerManager.GetPlayers()
 	
 end
 
+function GM:SetupPlayerVisibility( pl, viewEnt )
+	
+	--TODO: Instead of Vector( 0, 0, 0 ), maybe use the player's game's position.
+	AddOriginToPVS( Vector( 0, 0, 0 ) )
+	
+end
+
 function GM.PlayerManager.CreatePlayer( pl, uid )
 	
 	local CPl = ents.Create( "CatanPlayer" )

@@ -2,6 +2,14 @@
 ENT.Type = "anim"
 ENT.Base = "base_anim"
 
+function ENT:SharedInitialize()
+	
+	self.UsedColors = {}
+	self.Players = {}
+	self.Spectators = {}
+	
+end
+
 function ENT:SetupDataTables()
 	
 	self:DTVar( "Int", 0, "GameID" )
@@ -17,9 +25,27 @@ function ENT:GameID()
 	
 end
 
+function ENT:GetPlayers()
+	
+	return self.Players
+	
+end
+
 function ENT:GetNumPlayers()
 	
 	return self.dt.NumPlayers
+	
+end
+
+function ENT:GetSpectators()
+	
+	return self.Spectators
+	
+end
+
+function ENT:GetNumSpectators()
+	
+	return #self.Spectators
 	
 end
 
@@ -41,16 +67,4 @@ function ENT:GetPlayerByID( id )
 	
 end
 
-ENUM( "PlayerColor", "Red", "Blue", "Green", "Yellow", "White", "Black" )
-ENT.UsedColors = {}
-
-function ENT:RequestColor( CPlayer, Color_Enum )
-	
-	if ( CPlayer.dt.Color != 0 or self.UsedColors[Color_Enum] ) then return false end
-	
-	CPlayer.dt.Color = Color_Enum
-	self.UsedColors[Color_Enum] = true
-	
-	return true
-	
-end
+ENUM( "PlayerColor", "Red", "Blue", "Green", "Orange", "White", "Brown" )

@@ -1,12 +1,16 @@
 
 GM.TurnManager = {}
 
-ENUM_PLACEMENT_BACKWARD = 0
-ENUM_PLACEMENT_FORWARD = 1
+ENUM( "TurnPlacement",
+	"Backward",
+	"Forward"
+	)
 
-ENUM_TURN_GATHER = 0
-ENUM_TURN_TRADE = 1
-ENUM_TURN_BUILD = 2
+ENUM( "TurnState",
+	"Gather",
+	"Trade",
+	"Build"
+	)
 
 function GM.TurnManager:GetTurnManager(CGame)
     local Table = {}
@@ -16,21 +20,18 @@ function GM.TurnManager:GetTurnManager(CGame)
 	Table.Players = table.Copy(CGame:GetPlayers())
 	Table.PlayerCount = table.Count(Table.Players)
 	Table.Turn = 1
-	Table.TurnPhase
+	Table.TurnPhase = TurnState.Gather
 	Table.Playing = false
-	Table.InitilizationPhase = ENUM_PLACEMENT_BACKWARD
+	Table.InitilizationPhase = TurnPlacement.Backward
 	Table.InitialRolls = {}
-	for k,v in pairs(self.Players) do
-		v:RollDie()
-	end
     return Table
 end
 
-function GM.TurnManger:SetupOrder()
-	table.sort(self.InitialRolls)
+function GM.TurnManager:SetupOrder()
+	table.SortByMember(self.InitialRolls, "Roll")
 	
 	for k,v in pairs(self.Players) do
-		if(self.InitialRolls[self.PlayerCount] == v) then
+		if(self.InitialRolls[1].ply == v) then
 			self.FirstTurn = k
 			break
 		end
@@ -45,8 +46,16 @@ function GM.TurnManger:SetupOrder()
 	self:StartTurn()
 end
 
+function GM.TurnManager:OnGameStarted()
+	
+	for k,v in pairs(self.Players) do
+		v:RollDie()
+	end
+	
+end
+
 function GM.TurnManager:OnDiceRolled(CPlayer, Result)
-	self.InitialRolls[CPlayer] = Result
+	table.insert(self.InitialRolls, {ply = CPlayer, Roll = Result})
 	if(table.Count(self.InitialRolls) == self.PlayerCount) then
 		self:SetupOrder()
 	end
@@ -54,18 +63,18 @@ end
 
 function GM.TurnManager:StartTurn()
 	if(self.Playing) then
-		self.TurnPhase = ENUM_TURN_GATHER
+		self.TurnPhase = TurnState.Gather
 		
 	else // Setting up the board
 		if(self.Turn == 0) then
 			self.Turn = self.PlayerCount
-		else if(self.Turn > self.PlayerCount) then
+		elseif(self.Turn > self.PlayerCount) then
 			self.Turn = 1
 		end
 		
 		self.Players[self.Turn]:PlacePiece()
 		
-		if(self.InitilizationPhase == ENUM_PLACEMENT_FORWARD) then
+		if(self.InitilizationPhase == TurnPlacement.Forward) then
 			if(self.Turn == self.FirstTurn) then
 				self.Playing = true
 				return
@@ -74,7 +83,7 @@ function GM.TurnManager:StartTurn()
 			end
 		else
 			if(self.Turn == self.LastTurn) then
-				self.InitilizationPhase = ENUM_PLACEMENT_FORWARD
+				self.InitilizationPhase = TurnPlacement.Forward
 			else
 				self.Turn = self.Turn - 1
 			end
