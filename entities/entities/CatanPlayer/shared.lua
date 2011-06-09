@@ -93,6 +93,12 @@ function ENT:SetupDataTables()
 	
 end
 
+function ENT:ColorID()
+	
+	return self.dt.Color
+	
+end
+
 function ENT:PlayerID()
 	
 	return self.dt.PlayerID
@@ -114,6 +120,12 @@ end
 function ENT:GetEyeTarget()
 	
 	return self.dt.EyeTarget
+	
+end
+
+function ENT:IsReady()
+	
+	return self.readyflag
 	
 end
 

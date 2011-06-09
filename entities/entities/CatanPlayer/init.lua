@@ -12,6 +12,8 @@ function ENT:Initialize()
 	self:SetMoveType( MOVETYPE_NONE )
 	self:SetSolid( SOLID_NONE )
 	
+	self:SetColorID( 0 )
+	
 	self.Vehicle = ents.Create( "prop_vehicle_prisoner_pod" )
 	self.Vehicle:SetModel( "models/props_c17/furniturechair001a.mdl" )
 	self.Vehicle:SetKeyValue( "vehiclescript", "scripts/vehicles/prisoner_pod.txt" )
@@ -83,10 +85,32 @@ function ENT:SetPlayerID( id )
 	
 end
 
+function ENT:SetColorID( id )
+	
+	self.dt.Color = id
+	
+end
+
+function ENT:SetReady( bool )
+	
+	self.readyflag = bool
+	
+	self:GetGame():OnPlayerReady( self, bool )
+	
+	umsg.Start( "CatanGame.PlayerReady", self:GetGame():GetRecipientFilter() )
+		
+		umsg.Char( self:PlayerID()-128 )
+		umsg.Bool( bool )
+		
+	umsg.End()
+	
+end
+
 function ENT:RollDie()
 	
+	self:ChatPrint( "You rolled the dice" )
 	timer.Simple( 4, function()
-		self:GetGame():OnDiceRolled( self, math.random( 1, 12 ) )
+		self:GetGame():OnDiceRolled( self, math.random( 2, 12 ) )
 	end )
 	
 end
