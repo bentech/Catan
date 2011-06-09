@@ -79,6 +79,8 @@ function GM:HUDShouldDraw(Name)
 	
 	if(Name == "CHudHealth") then
 		return false
+	elseif(Name == "CHudChat") then
+		return false
 	elseif(Name == "CHudCrosshair") then
 		return false
 	end

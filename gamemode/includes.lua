@@ -88,6 +88,7 @@ elseif( CLIENT ) then
 	include("Systems/PlayerManager/client/hooks.lua")
 	include("GUI/core.lua")
 	include("GUI/nametags.lua")
+	include("GUI/chatbox.lua")
 	include( "enums.lua" )
 
 	print( "# Done loading shared files     #" )

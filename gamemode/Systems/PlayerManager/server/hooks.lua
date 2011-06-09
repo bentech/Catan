@@ -110,10 +110,41 @@ function GM:PlayerInitialized( pl )
 	
 end
 
-function GM:PlayerSay( pl, txt, bWorldChat )
+local ChatCommands = {
+	forfeit = "sog_forfeit",
+	ready = "sog_ready",
+	start = "sog_start",
+	join = "sog_join",
+	leave = "sog_leave",
+	list = "sog_list",
+	create = "sog_create",
+	spec = "sog_spec",
+	color = "sog_requestcolor",
+	requestcolor = "sog_requestcolor"
+}
+
+function GM:PlayerSay(ply, text, bWorldChat)
+
+	local TrimText = string.Trim(text)
+	local Return = TrimText
 	
-	return txt
+	local Text = string.lower(TrimText)
+	local Pre = string.sub(Text, 1, 1)
+	local AfterPre = string.sub(TrimText, 2)
 	
+	if(Pre == "/") then
+		local Args = string.Explode(" ", AfterPre)
+		local Command = Args[1]
+		table.remove(Args, 1)
+		if(ChatCommands[Command]) then
+			ply:ConCommand(ChatCommands[Command].." "..table.concat(Args, " "))
+		else
+			ply:ChatPrint("Invalid Command")
+		end
+		return ""
+	end
+	
+	return Return
 end
 
 function GM:AssociatePlayer( pl )
