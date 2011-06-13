@@ -13,7 +13,6 @@ concommand.Add( "sog_requestcolor", function( pl, cmd, args )
 	end
 	
 	local col = tonumber( args[1] )
-	ErrorNoHalt( col, "\n" )
 	if ( not col ) then
 		
 		col = tostring( args[1] or "" ):lower()

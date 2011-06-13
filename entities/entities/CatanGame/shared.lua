@@ -16,6 +16,7 @@ function ENT:SetupDataTables()
 	self:DTVar( "Int", 1, "NumPlayers" )
 	self:DTVar( "Int", 2, "MaxPlayers" )
 	self:DTVar( "Int", 3, "GameState" )
+	self:DTVar( "Entity", 0, "Board" )
 	
 end
 
@@ -28,6 +29,12 @@ end
 function ENT:GetPlayers()
 	
 	return self.Players
+	
+end
+
+function ENT:GetBoard()
+	
+	return self.dt.Board
 	
 end
 

@@ -21,8 +21,13 @@ function ENT:Initialize()
 	self:SetMoveType( MOVETYPE_NONE )
 	self:SetSolid( SOLID_NONE )
 	
+	self.desertTile = nil
+	
 	self:SharedInitialize()
 	self:CreateTiles()
+	self:CreatePieces()
+	
+	self:OnBoardSpawned()
 	
 	local phys = self:GetPhysicsObject()
 	if( ValidEntity( phys ) ) then	
@@ -77,24 +82,6 @@ local resource_counts_6_players = {}
 	resource_counts_6_players[ Terrain.Fields ] = 6
 	resource_counts_6_players[ Terrain.Forest ] = 6
 
-function TerrainName( terrainType )
-	
-	if( terrainType == Terrain.Desert ) then
-		return "Desert"
-	elseif( terrainType == Terrain.Hills ) then
-		return "Hills"
-	elseif( terrainType == Terrain.Pasture ) then
-		return "Pasture"
-	elseif( terrainType == Terrain.Mountains ) then
-		return "Mountains"
-	elseif( terrainType == Terrain.Fields ) then
-		return "fields"
-	elseif( terrainType == Terrain.Forest ) then
-		return "forest"
-	end
-	
-end
-
 function ENT:CreateTiles()
 	
 	local tiles = {}
@@ -140,15 +127,18 @@ function ENT:CreateTiles()
 		
 		local tile = tiles[ tile_count ]
 		tile:SetPos( self:TileToWorld( x, y ) )
+		tile:SetX( x )
+		tile:SetY( y )
 		-- tile:SetParent( self )
 		self.Tiles[ x ][ y ] = tile
 		tile_count = tile_count - 1
 		
+		tile:Spawn()
+		tile:Activate()
+		
 	end
 	
 	--TODO: Center the board on the table
-	
-	self:OnBoardSpawned()
 	
 end
 
@@ -156,17 +146,42 @@ function ENT:CreateTile( terrainType )
 	
 	local tile = ents.Create( "CatanTile" )
 	tile:SetTerrain( terrainType )
+	tile:SetBoard( self )
 	tile:SetPos( self:GetPos() )
-	tile:SetAngles( Angle( 0, 90, 0 ) )
-	tile:Spawn()
-	tile:Activate()
+	tile:SetAngles( Angle( 0, 90 + math.random(1,6) * 60, 0 ) )
+	
+	if( terrainType == Terrain.Desert ) then
+		self.desertTile = tile
+	end
 	
 	return tile
 	
 end
 
-function ENT:OnBoardSpawned()
+function ENT:SetRobber( robber )
+	
+	self.dt.Robber = robber
+	
+end
 
-	--TODO: Usermessage the client and call OnBoardSpawned clientside
+function ENT:CreatePieces()
+	
+	self:CreateRobber()
+	
+end
+
+function ENT:CreateRobber()
+	
+	local robber = ents.Create( "CatanPieceRobber" )
+	robber:SetTile( self.desertTile )
+	
+	self:SetRobber( robber )
+	
+	robber:Spawn()
+	robber:Activate()
+	
+end
+
+function ENT:OnBoardSpawned()
 	
 end

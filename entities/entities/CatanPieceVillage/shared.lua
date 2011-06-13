@@ -4,7 +4,7 @@ ENT.Base = "CatanPiece"
 
 function ENT:SetupDataTables()
 	self.BaseClass.SetupDataTables(self)
-	self:DTVar( "Entity", 1, "Corner" )
+	self:DTVar( "Entity", 2, "Corner" )
 end
 
 function ENT:GetCorner()

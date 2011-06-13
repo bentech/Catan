@@ -10,12 +10,18 @@ include( "commands/ready.lua" )
 function ENT:Initialize()
 	
 	self:SharedInitialize()
-	self.Board = NewBoard( self )
+	self:SetBoard( NewBoard( self ) )
 	
 end
 
 AccessorFunc( ENT, "CHostPlayer", "Host" )
 AccessorFunc( ENT, "Password", "Password" )
+
+function ENT:SetBoard( board )
+	
+	self.dt.Board = board
+	
+end
 
 function ENT:UpdateTransmitState()
 	

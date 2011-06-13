@@ -9,7 +9,7 @@ GM.ViewOrigin = Vector( 0, 0, 0 )
 GM.ViewDistance = 400
 GM.MinViewDistance = 200
 GM.MaxViewDistance = 600
-GM.ViewAngle = Angle( 64, 0, 0 )
+GM.ViewAngle = Angle( 64, 90, 0 )
 GM.View = {}
 GM.View.origin = Vector()
 GM.View.angles = Angle()
@@ -38,67 +38,14 @@ function GM:CalcView( pl, pos, angles, fov )
 end
 
 function GM:HUDPaint()
-	local X = self.Chatbox.XOrigin
-	local Y = self.Chatbox.YOrigin
-	local Lines = 0
-	local Count = table.Count(self.Chatbox.Chat)
-	local k, v = 0, 0
 	
-	surface.SetFont(self.Chatbox.ChatFont)
-	for i=0,Count do
-		k = Count - i
-		v = self.Chatbox.Chat[k]
-		if(v and Lines < self.Chatbox.MaxLines) then
-			Y = self.Chatbox:DrawLine(X, Y, v.Prefix, v.Name, v.Text, v.NameColor, v.TextColor, v.Alpha)
-			Lines = Lines + 1
-		else
-			table.remove(self.Chatbox.Chat, k)
-		end
-	end
+	self:ChatPaint()
+	
 end
 
 function GM:Think()
-	for k,v in pairs(self.Chatbox.Chat) do
-		if(!v.Alpha) then
-			v.Alpha = 255
-		end
-		if(self.Chatbox.Chatting) then
-			if(v.Alpha != 255) then
-				v.Alpha = 255
-			end
-			if(v.Fade) then
-				v.Fade = false
-			end
-			v.FadeTime = CurTime() + self.Chatbox.FadeOutTime
-		else
-			if(v.Fade) then
-				if(v.Alpha != 0) then
-					v.Alpha = math.Clamp(v.Alpha - 2, 0, 255)
-				end
-			end
-			if(!v.FadeTime) then
-				v.FadeTime = CurTime() + self.Chatbox.FadeOutTime
-				v.FadeAmount = 1
-			end
-			if(v.FadeTime <= CurTime()) then
-				v.Fade = true
-			end
-		end
-	end
-	
-	-- for _, pl in pairs( player.GetAll() ) do
-		
-		-- if( pl:IsInGame() || pl:IsSpectatingGame() ) then
-			
-			-- pl:SetNoDraw( false )
-			
-		-- else
-			
-			-- pl:SetNoDraw( true )
-			
-		-- end
-		
-	-- end
+
+	self:ChatThink()
 	
 end
 
@@ -144,7 +91,7 @@ function GM:PlayerBindPress(ply, bind, pressed)
 	end
 end
 
-local function GetPlayerTrace( pl )
+function GetPlayerTrace()
 	
 	local intersectPos = intersectRayPlane( GAMEMODE.View.origin, GAMEMODE.View.origin + GAMEMODE.View.aim * 4096, GAMEMODE.ViewOrigin, Vector( 0, 0, 1 ) )
 	return intersectPos

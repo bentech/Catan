@@ -85,6 +85,7 @@ elseif( CLIENT ) then
 	print( "# Loading clientside files      #" )
 
 	include("Systems/PlayerManager/client/core.lua")
+	include("Systems/PlayerManager/client/chat.lua")
 	include("Systems/PlayerManager/client/hooks.lua")
 	include("GUI/core.lua")
 	include("GUI/nametags.lua")

@@ -20,8 +20,17 @@ function GM:PlayerInitialSpawn( pl )
 		
 	end
 	
-	pl:SetHullDuck( Vector( -16, -16, 0 ), Vector( 16, 16, 72 ) )
-	-- pl:SetAllowFullRotation( true )
+	if( pl:IsBot() ) then
+		
+		ErrorNoHalt( "player is bot\n" )
+		timer.Simple( 1, concommand.Run, pl, "~cl_ready" )
+		timer.Simple( 1.1, concommand.Run, pl, "sog_join", {"1"} )
+		timer.Simple( 1.2, concommand.Run, pl, "sog_requestcolor", {"red"} )
+		timer.Simple( 1.2, concommand.Run, pl, "sog_requestcolor", {"green"} )
+		timer.Simple( 1.2, concommand.Run, pl, "sog_requestcolor", {"blue"} )
+		timer.Simple( 1.5, concommand.Run, pl, "sog_ready", {"1"} )
+		
+	end
 	
 end
 
@@ -152,8 +161,6 @@ function GM:AssociatePlayer( pl )
 	local associated = false
 	local uid = pl:UniqueID()
 	for _, CPl in pairs( self.PlayerManager.GetPlayers() ) do
-		
-		ErrorNoHalt( CPl:UniqueID(), uid, "\n" )
 		
 		if( CPl:UniqueID() == uid ) then
 			

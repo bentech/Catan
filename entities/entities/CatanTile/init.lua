@@ -31,6 +31,6 @@ function ENT:SetBoard( board )
 end
 
 function ENT:SetTerrain( terrainType )
-	self:SetSkin( terrainType )
+	self:SetSkin( terrainType-1 )
 	self.dt.TerrainType = terrainType
 end
