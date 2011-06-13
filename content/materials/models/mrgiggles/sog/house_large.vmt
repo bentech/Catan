@@ -1,0 +1,6 @@
+"VertexLitGeneric"
+{
+	"$basetexture" "models\mrgiggles\sog\house_large"
+	"$model" 1
+	"$envmapmode" 1
+}
