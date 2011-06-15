@@ -9,7 +9,12 @@ function ENT:SetupDataTables()
 	self:DTVar( "Int", 0, "X" )
 	self:DTVar( "Int", 1, "Y" )
 	self:DTVar( "Int", 2, "TerrainType" )
+	self:DTVar( "Int", 3, "Token" )
 	self:DTVar( "Entity", 0, "Board" )
+end
+
+function ENT:GetToken()
+	return self.dt.Token
 end
 
 function ENT:GetTerrain()
